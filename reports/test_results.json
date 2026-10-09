@@ -1,0 +1,41 @@
+{
+  "timestamp_utc": "2026-10-09T11:12:13.925849+00:00",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "tests_run": 175,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "elapsed_seconds": 5.1,
+  "by_module": {
+    "tests.test_cli": 32,
+    "tests.test_csv_io": 27,
+    "tests.test_invariants": 3,
+    "tests.test_models": 13,
+    "tests.test_service": 46,
+    "tests.test_storage": 27,
+    "tests.test_validators": 27
+  },
+  "python_3_10_ast_syntax_errors": [],
+  "application_import_roots": [
+    "argparse",
+    "calendar",
+    "collections",
+    "contextlib",
+    "csv",
+    "dataclasses",
+    "datetime",
+    "functools",
+    "heapq",
+    "json",
+    "os",
+    "pathlib",
+    "re",
+    "sys",
+    "tempfile",
+    "typing",
+    "uuid"
+  ],
+  "non_standard_library_imports": [],
+  "note": "문법 검사는 Python 3.10 실제 인터프리터 실행/정적 타입 검사와 다릅니다. CLI 하위 프로세스는 -S로 site 패키지 없이 실행합니다."
+}
