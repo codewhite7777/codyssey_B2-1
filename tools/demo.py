@@ -12,11 +12,20 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
+    """임시 저장소에서 전체 CLI 사용 흐름을 시연하고 출력·종료 코드를 검사한다.
+
+    사용자 data는 건드리지 않고 실제 하위 프로세스를 실행한다.
+    시연 기록은 reports/cli_demo.txt에 저장하며 예상 결과가 다르면 검증을 실패시킨다.
+    """
     lines = ["B2-1 실제 CLI 시연", f"실행 시각(UTC): {datetime.now(timezone.utc).isoformat()}", ""]
     with tempfile.TemporaryDirectory(prefix="budget-demo-") as directory:
         root = Path(directory)
         data = root / "data"
         def run(arguments, user_input="", expected=0):
+            """한 CLI 명령을 하위 프로세스로 실행하고 입력·출력·종료 코드를 시연 기록에 남긴다.
+
+            user_input을 stdin으로 전달하고 expected와 실제 종료 코드를 비교하여 결과를 반환한다.
+            """
             command = [sys.executable, "-S", "-m", "budget_app", "--data-dir", str(data), *arguments]
             result = subprocess.run(command, cwd=ROOT, input=user_input, text=True, encoding="utf-8",
                                     capture_output=True, timeout=20)

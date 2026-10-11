@@ -17,6 +17,10 @@ from budget_app.service import BudgetService
 
 
 def measured(operation):
+    """작업 하나의 실행 시간과 추가 추적 메모리 피크를 측정해 결과와 함께 반환한다.
+
+    측정 전에 가비지 수집을 수행한다. tracemalloc 수치는 전체 프로세스 RSS가 아니다.
+    """
     gc.collect()
     tracemalloc.start()
     start = time.perf_counter()
@@ -28,17 +32,23 @@ def measured(operation):
 
 
 def consume(generator):
+    """제너레이터를 끝까지 소비해 건수를 세고 끝나거나 실패하면 close한다."""
     with closing(generator):
         return sum(1 for _ in generator)
 
 
 def benchmark(count, operations):
+    """합성 거래 count건의 임시 저장소에서 지정된 작업만 측정하고 결과를 대조한다.
+
+    실제 사용자 파일은 읽지 않는다. 작업 후 기대 건수·합계와 다르면 검증을 실패시킨다.
+    """
     with tempfile.TemporaryDirectory(prefix="budget-benchmark-") as directory:
         root = Path(directory)
         service = BudgetService(root / "data")
         service.add_category("food")
         service.add_category("salary")
         def synthetic():
+            """ID 내림차순 합성 거래를 하나씩 만든다. 매 10번째는 수입, 나머지는 지출이다."""
             for index in range(count, 0, -1):
                 income = index % 10 == 0
                 yield Transaction(f"TX-{index:012d}", "income" if income else "expense", "2026-10-06",
@@ -79,6 +89,7 @@ def benchmark(count, operations):
 
 
 def main():
+    """측정 건수·작업·출력 경로를 해석해 각 벤치마크를 실행하고 JSON 보고서를 저장한다."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--sizes", nargs="+", type=int, default=[10000, 100000])
     parser.add_argument("--operations", nargs="+", default=["list_20", "search_no_match_full_scan", "summary", "export", "add", "update", "delete"],

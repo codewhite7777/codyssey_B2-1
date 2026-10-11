@@ -3,7 +3,7 @@
 import json
 import os
 import tempfile
-from collections.abc import Iterator, Mapping
+from collections.abc import Generator, Iterator, Mapping
 from contextlib import closing, contextmanager
 from dataclasses import asdict
 from pathlib import Path
@@ -18,6 +18,10 @@ LOCK_NAME = ".budget_app.lock"
 
 
 def _unique_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
+    """JSON 객체의 키·값 쌍을 사전으로 만들되 중복 키를 발견하면 ValueError를 낸다.
+
+    json.loads의 object_pairs_hook으로 사용하여 같은 키가 조용히 덮어써지는 것을 막는다.
+    """
     result: dict[str, object] = {}
     for key, value in pairs:
         if key in result:
@@ -27,14 +31,20 @@ def _unique_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
 
 
 def _reject_constant(value: str) -> None:
+    """JSON 표준에 없는 NaN·Infinity 등의 숫자 상수를 발견하면 ValueError를 낸다.
+
+    json.loads의 parse_constant 콜백으로 연결하여 저장 손상을 숨기지 않는다.
+    """
     raise ValueError(f"허용되지 않는 JSON 숫자: {value}")
 
 
 @contextmanager
 def atomic_text(path: Path) -> Iterator[TextIO]:
-    """실패하면 원본 보존. temp와 원본은 같은 디렉터리/파일시스템에 둔다.
+    """같은 폴더의 임시 출력 파일을 제공하고 쓰기가 성공하면 원본 경로로 교체한다.
 
-    단일 교체의 원자성이지 여러 파일의 트랜잭션이나 정전 내구성 보장은 아니다.
+    yield 뒤에 flush·fsync·닫기·os.replace를 순서대로 실행한다.
+    교체 전 실패하면 원본을 유지하고 finally에서 남은 임시 파일을 정리한다.
+    출력 폴더가 있어야 하며 단일 파일 교체이지 다중 파일 커밋·정전 내구성 보장은 아니다.
     """
     fd, name = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent)
     temporary = Path(name)
@@ -54,17 +64,29 @@ def atomic_text(path: Path) -> Iterator[TextIO]:
 
 
 def write_record(stream: TextIO, record: Mapping[str, object]) -> None:
+    """레코드 하나를 UTF-8 텍스트 스트림에 JSON 한 줄과 줄바꿈으로 기록한다.
+
+    값 안의 개행은 JSON 이스케이프로 저장하고 비표준 숫자는 거부한다.
+    스트림을 닫거나 교체하지 않으며 그 책임은 atomic_text에 있다.
+    """
     stream.write(json.dumps(dict(record), ensure_ascii=False, allow_nan=False, separators=(",", ":")) + "\n")
 
 
-def iter_jsonl(path: Path) -> Iterator[tuple[int, dict[str, object]]]:
-    """read()/readlines() 없이 한 줄씩 검증해서 전달한다."""
+def iter_jsonl(path: Path) -> Generator[tuple[int, dict[str, object]], None, None]:
+    """파일을 한 줄씩 읽고 행 번호와 검증된 JSON 객체를 전달한다.
+
+    빈 줄·깨진 JSON·중복 키·잘못된 인코딩은 StorageError로 알린다.
+    read/readlines로 전체를 올리지 않고 순회 종료나 close 시 파일을 닫는다.
+    """
     line_number = 0
     try:
         with path.open("r", encoding="utf-8", newline="") as stream:
             for line_number, line in enumerate(stream, 1):
                 try:
-                    record = json.loads(line, object_pairs_hook=_unique_object, parse_constant=_reject_constant)
+                    record = json.loads(
+                        line, object_pairs_hook=_unique_object,
+                        parse_constant=_reject_constant,
+                    )
                     if not isinstance(record, dict):
                         raise ValueError("JSON 객체가 아닙니다.")
                 except (ValueError, TypeError) as exc:
@@ -78,12 +100,21 @@ def iter_jsonl(path: Path) -> Iterator[tuple[int, dict[str, object]]]:
 
 
 def _schema(record: dict[str, object], required: set[str], optional: set[str] | None = None) -> None:
+    """필수 필드가 모두 있고 허용하지 않은 필드가 없는지 검사한다.
+
+    값의 자료형·범위는 여기서 검사하지 않고 뒤의 모델 검증에 맡긴다.
+    """
     allowed = required | (optional or set())
     if not required <= record.keys() or not record.keys() <= allowed:
         raise ValidationError("저장 레코드의 필드 구성이 올바르지 않습니다.", "README의 JSONL 스키마를 확인하세요.")
 
 
 def transaction_from_record(record: dict[str, object]) -> Transaction:
+    """JSON 사전의 스키마를 확인하고 tags 배열을 튜플로 바꾸어 거래 객체를 반환한다.
+
+    선택 필드가 없으면 빈 메모·태그를 사용한다. cast는 타입 설명일 뿐 값 변환이나
+    검증이 아니므로 최종 필드 규칙은 Transaction 생성 시 다시 검사한다.
+    """
     _schema(record, {"id", "type", "date", "amount", "category"}, {"memo", "tags"})
     tags = record.get("tags", [])
     if not isinstance(tags, list):
@@ -99,9 +130,15 @@ def transaction_from_record(record: dict[str, object]) -> Transaction:
 
 class TransactionRepository:
     def __init__(self, path: Path) -> None:
+        """거래 파일 경로만 보관한다. 파일 생성·잠금은 DataStore에서 처리한다."""
         self.path = path
 
-    def iter_transactions(self) -> Iterator[Transaction]:
+    def iter_transactions(self) -> Generator[Transaction, None, None]:
+        """거래 파일의 레코드를 모델로 바꾸며 날짜·ID 내림차순을 검사해 하나씩 전달한다.
+
+        직전 정렬 키보다 크거나 같으면 순서 오류/동일 키 중복으로 거부한다.
+        다른 날짜에 같은 ID가 있는지의 전역 검사는 서비스의 _inspect가 담당한다.
+        """
         previous: tuple[str, str] | None = None
         with closing(iter_jsonl(self.path)) as records:
             for line_number, record in records:
@@ -116,6 +153,11 @@ class TransactionRepository:
                 yield transaction
 
     def replace_all(self, transactions: Iterator[Transaction]) -> None:
+        """정렬된 거래 스트림을 검사하며 임시 파일에 쓰고 완성되면 원본을 교체한다.
+
+        정렬 순서가 깨지면 StorageError로 중단한다. 호출자가 잠금과 전역 ID 검사를
+        먼저 수행해야 하며, 이 함수는 거래 전체를 메모리에 수집하지 않는다.
+        """
         previous: tuple[str, str] | None = None
         with atomic_text(self.path) as stream:
             for transaction in transactions:
@@ -128,9 +170,14 @@ class TransactionRepository:
 
 class CategoryStore:
     def __init__(self, path: Path) -> None:
+        """카테고리 파일 경로를 보관한다. 생성자 자체에서는 파일에 접근하지 않는다."""
         self.path = path
 
     def load(self) -> set[str]:
+        """카테고리 레코드를 검증하여 이름 집합으로 반환한다.
+
+        이름 중복·스키마 오류를 행 번호와 함께 StorageError로 알린다. 목록은 메모리에 읽는다.
+        """
         categories: set[str] = set()
         with closing(iter_jsonl(self.path)) as records:
             for line, record in records:
@@ -145,6 +192,10 @@ class CategoryStore:
         return categories
 
     def save(self, categories: set[str]) -> None:
+        """카테고리 이름을 오름차순으로 검증·기록하고 완성된 임시 파일로 교체한다.
+
+        호출자가 잠금을 소유해야 하며 거래에서 사용 중인지는 서비스가 미리 검사한다.
+        """
         with atomic_text(self.path) as stream:
             for name in sorted(categories):
                 write_record(stream, {"name": validate_category_name(name)})
@@ -152,9 +203,14 @@ class CategoryStore:
 
 class BudgetStore:
     def __init__(self, path: Path) -> None:
+        """예산 파일 경로를 보관한다. 실제 읽기·쓰기는 load/save에서 수행한다."""
         self.path = path
 
     def load(self) -> dict[str, MonthlyBudget]:
+        """예산 레코드를 검증하고 월을 키로 하는 MonthlyBudget 사전을 반환한다.
+
+        같은 월이 두 번 나오거나 값이 잘못되면 행 번호를 붙인 StorageError로 중단한다.
+        """
         budgets: dict[str, MonthlyBudget] = {}
         with closing(iter_jsonl(self.path)) as records:
             for line, record in records:
@@ -169,6 +225,10 @@ class BudgetStore:
         return budgets
 
     def save(self, budgets: dict[str, MonthlyBudget]) -> None:
+        """월 순서로 예산 객체를 JSON 레코드로 기록하고 예산 파일을 교체한다.
+
+        유효한 모델과 월 키가 들어 있는 사전을 잠금 안에서 전달하는 서비스가 호출한다.
+        """
         with atomic_text(self.path) as stream:
             for month in sorted(budgets):
                 write_record(stream, asdict(budgets[month]))
@@ -176,6 +236,10 @@ class BudgetStore:
 
 class DataStore:
     def __init__(self, directory: str | Path) -> None:
+        """저장 폴더를 절대 경로로 정리하고 거래·카테고리·예산 저장소를 구성한다.
+
+        경로 계산만 하므로 help를 출력할 때는 데이터 파일이 생성되지 않는다.
+        """
         self.directory = Path(directory).expanduser().resolve()
         self.transactions = TransactionRepository(self.directory / DATA_NAMES[0])
         self.categories = CategoryStore(self.directory / DATA_NAMES[1])
@@ -183,10 +247,11 @@ class DataStore:
 
     @contextmanager
     def session(self) -> Iterator[None]:
-        """읽기도 잠금: 일관된 카테고리/거래 스냅샷과 Windows 교체를 고려한다.
+        """배타적 잠금을 획득하고 저장 파일을 초기화한 동안에만 파일 작업을 허용한다.
 
-        입력 대기 중에는 잠그지 않는다. 명령의 실제 파일 작업 동안만 획득한다.
-        강제 종료 후 남은 잠금은 자동 삭제하지 않는다(PID 재사용/오판 방지).
+        O_EXCL로 잠금 파일을 중복 생성하지 못하게 하며 읽기 작업도 같은 잠금을 사용한다.
+        yield가 끝나거나 예외가 나면 잠금을 지운다. 사용자 입력 대기에는 사용하지 않는다.
+        강제 종료로 남은 잠금은 실행 중 프로세스가 없는지 확인한 사용자가 제거해야 한다.
         """
         self.directory.mkdir(parents=True, exist_ok=True)
         lock = self.directory / LOCK_NAME
@@ -208,6 +273,11 @@ class DataStore:
             lock.unlink(missing_ok=True)
 
     def _initialize_locked(self) -> None:
+        """잠금 상태에서 저장 경로를 검사하고 최초 실행에 필요한 세 파일을 만든다.
+
+        기존 내용이 있는데 일부 파일이 없으면 유실로 보고 자동 초기화하지 않는다.
+        디렉터리나 심볼릭 링크도 거부하며, 아직 전부 빈 초기화 상태라면 누락 파일을 만든다.
+        """
         paths = [self.directory / name for name in DATA_NAMES]
         for path in paths:
             if path.is_symlink() or (path.exists() and not path.is_file()):
@@ -223,11 +293,23 @@ class DataStore:
                 pass
 
     def check_external_path(self, path: str | Path) -> Path:
+        """CSV 경로를 실제 경로로 정리하고 내부 저장 파일을 가리키지 않는지 검사한다.
+
+        심볼릭 링크와 내부 JSONL·잠금 파일의 동일 경로/하드링크를 거부한다.
+        통과한 Path를 반환하며 파일의 존재·읽기 권한은 실제 입출력 때 확인한다.
+        """
         raw = Path(path).expanduser()
         if raw.is_symlink():
             raise ValidationError("가져오기/내보내기 경로에 심볼릭 링크를 사용할 수 없습니다.", "일반 CSV 파일의 실제 경로를 지정하세요.")
         result = raw.resolve()
         for protected in [self.directory / name for name in (*DATA_NAMES, LOCK_NAME)]:
-            if result == protected or (result.exists() and protected.exists() and os.path.samefile(result, protected)):
-                raise ValidationError("내부 저장 파일을 CSV 경로로 지정할 수 없습니다.", "transactions/categories/budgets 및 잠금 파일과 다른 경로를 사용하세요.")
+            if result == protected or (
+                result.exists()
+                and protected.exists()
+                and os.path.samefile(result, protected)
+            ):
+                raise ValidationError(
+                    "내부 저장 파일을 CSV 경로로 지정할 수 없습니다.",
+                    "transactions/categories/budgets 및 잠금 파일과 다른 경로를 사용하세요.",
+                )
         return result

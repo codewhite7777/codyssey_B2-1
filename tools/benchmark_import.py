@@ -14,6 +14,10 @@ from .benchmark import measured
 
 
 def main():
+    """CSV 10만 행을 생성해 빈 임시 가계부로 가져오고 건수·합계·시간·메모리를 확인한다.
+
+    실제 사용자 데이터 대신 임시 폴더를 사용하며 측정값을 reports에 저장한다.
+    """
     count = 100000
     with tempfile.TemporaryDirectory(prefix="budget-import-benchmark-") as directory:
         root = Path(directory)

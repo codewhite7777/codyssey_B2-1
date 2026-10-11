@@ -102,8 +102,19 @@ def validate_tags(value: tuple[str, ...]) -> tuple[str, ...]:
 
 
 def parse_tags(raw: str) -> tuple[str, ...]:
-    """앞뒤 공백/빈 항목을 제거하고, 입력 순서를 유지하며 중복을 제거한다."""
+    """쉼표 구분 문자열을 정리해 입력 순서를 유지한 중복 없는 태그 튜플로 반환한다.
+
+    각 조각의 앞뒤 공백을 제거하고 빈 항목·이미 본 항목을 건너뛴다.
+    완성된 튜플은 validate_tags로 다시 검사하며 대소문자는 합치지 않는다.
+    """
     if not isinstance(raw, str):
         raise ValidationError("태그 입력은 문자열이어야 합니다.", "예: meal,lunch. 태그가 없으면 엔터를 누르세요.")
-    tags = tuple(dict.fromkeys(part.strip() for part in raw.split(",") if part.strip()))
-    return validate_tags(tags)
+    seen: set[str] = set()
+    tags: list[str] = []
+    for part in raw.split(","):
+        tag = part.strip()
+        if not tag or tag in seen:
+            continue
+        seen.add(tag)
+        tags.append(tag)
+    return validate_tags(tuple(tags))

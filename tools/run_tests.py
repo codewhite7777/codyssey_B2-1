@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def flatten(suite):
+    """중첩된 unittest 테스트 묶음을 재귀적으로 풀어 개별 테스트를 하나씩 전달한다."""
     for test in suite:
         if isinstance(test, unittest.TestSuite):
             yield from flatten(test)
@@ -22,6 +23,11 @@ def flatten(suite):
 
 
 def main() -> int:
+    """테스트를 실행하고 실제 결과·3.10 문법 검사·표준 의존성 검사 기록을 저장한다.
+
+    reports에 로그와 JSON을 쓰며 모두 성공하면 0, 실패 항목이 있으면 1을 반환한다.
+    AST 문법 검사는 Python 3.10 실행이나 정적 타입 검사를 대신하지 않는다.
+    """
     reports = ROOT / "reports"
     reports.mkdir(exist_ok=True)
     suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"), top_level_dir=str(ROOT))

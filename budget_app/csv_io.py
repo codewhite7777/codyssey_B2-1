@@ -1,14 +1,21 @@
 """CSV 교환 스키마. 가져오기 검증과 내보내기를 내부 JSONL 저장에서 분리한다."""
 
 import csv
-from collections.abc import Iterator
+from collections.abc import Generator
 from contextlib import closing
 from pathlib import Path
 from typing import TextIO, TypedDict
 
 from .errors import AppError, ImportDataError
 from .models import Transaction
-from .validators import TransactionType, parse_amount, parse_tags, validate_date, validate_transaction_type, validate_category_name
+from .validators import (
+    TransactionType,
+    parse_amount,
+    parse_tags,
+    validate_category_name,
+    validate_date,
+    validate_transaction_type,
+)
 
 CSV_COLUMNS = ("date", "type", "category", "amount", "memo", "tags")
 REQUIRED_COLUMNS = frozenset(CSV_COLUMNS[:4])
@@ -24,7 +31,7 @@ class CSVTransactionInput(TypedDict):
     source_line: int
 
 
-def iter_csv(path: Path) -> Iterator[CSVTransactionInput]:
+def iter_csv(path: Path) -> Generator[CSVTransactionInput, None, None]:
     """행 값에 오류가 있으면 첫 오류의 위치를 보고하고 즉시 전체 가져오기를 중단한다.
 
     UTF-8 BOM은 입력에서만 허용. 빈 물리 행은 csv.reader의 관례대로 무시한다.
@@ -74,7 +81,12 @@ def iter_csv(path: Path) -> Iterator[CSVTransactionInput]:
         ) from exc
 
 
-def export_rows(stream: TextIO, transactions: Iterator[Transaction]) -> int:
+def export_rows(stream: TextIO, transactions: Generator[Transaction, None, None]) -> int:
+    """거래를 CSV 헤더의 고정 열 순서로 한 건씩 기록하고 기록 건수를 반환한다.
+
+    메모·태그 안의 쉼표와 개행은 csv 모듈에 맡긴다. 소비한 제너레이터는
+    종료·오류 시 닫고, 출력 파일의 실제 교체는 호출자가 관리한다.
+    """
     writer = csv.DictWriter(stream, fieldnames=CSV_COLUMNS, lineterminator="\n")
     writer.writeheader()
     count = 0

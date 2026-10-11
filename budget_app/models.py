@@ -34,6 +34,11 @@ class Transaction:
     tags: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
+        """거래 객체가 만들어질 때 모든 필드의 값 자체를 검증한다.
+
+        잘못된 값은 ValidationError로 거부한다. 카테고리 등록 여부와 ID 중복은
+        파일 조회가 필요하므로 여기서 검사하지 않고 서비스에 맡긴다.
+        """
         validate_label(self.id, "거래 id")
         validate_transaction_type(self.type)
         validate_date(self.date)
@@ -51,12 +56,16 @@ class MonthlyBudget:
     amount: int
 
     def __post_init__(self) -> None:
+        """월 형식과 예산의 양수 정수 조건을 검사해 잘못된 예산 객체 생성을 막는다."""
         validate_month(self.month)
         validate_amount(self.amount)
 
 
 def transaction_key(transaction: Transaction) -> tuple[str, str]:
-    """날짜 최신순; 같은 날짜는 ID 내림차순. 생성 시각 순서를 뜻하지 않는다."""
+    """거래의 정렬 기준인 (날짜, ID)를 반환한다.
+
+    호출 측이 내림차순으로 사용한다. 같은 날짜의 ID 순서는 등록 시각순이 아니다.
+    """
     return transaction.date, transaction.id
 
 
@@ -70,6 +79,11 @@ class SearchFilter:
     tag: str | None = None
 
     def __post_init__(self) -> None:
+        """지정된 검색 조건만 검증하고 시작일이 종료일보다 늦으면 거부한다.
+
+        None은 해당 조건을 적용하지 않는다는 뜻이다. 카테고리의 등록 여부는
+        조건 객체가 아니라 실제 검색을 실행하는 서비스가 확인한다.
+        """
         if self.start is not None:
             validate_date(self.start)
         if self.end is not None:
@@ -86,14 +100,24 @@ class SearchFilter:
             validate_tags((self.tag,))
 
     def matches(self, transaction: Transaction) -> bool:
-        return (
-            (self.start is None or transaction.date >= self.start)
-            and (self.end is None or transaction.date <= self.end)
-            and (self.category is None or transaction.category == self.category)
-            and (self.type is None or transaction.type == self.type)
-            and (self.query is None or self.query.casefold() in transaction.memo.casefold())
-            and (self.tag is None or self.tag in transaction.tags)
-        )
+        """거래가 지정된 모든 검색 조건을 만족하는지 True 또는 False로 반환한다.
+
+        기간은 양 끝을 포함하고, 메모는 대소문자 없는 부분 문자열로 비교한다.
+        카테고리·타입·태그는 정확히 비교하며 하나라도 다르면 즉시 False를 반환한다.
+        """
+        if self.start is not None and transaction.date < self.start:
+            return False
+        if self.end is not None and transaction.date > self.end:
+            return False
+        if self.category is not None and transaction.category != self.category:
+            return False
+        if self.type is not None and transaction.type != self.type:
+            return False
+        if self.query is not None and self.query.casefold() not in transaction.memo.casefold():
+            return False
+        if self.tag is not None and self.tag not in transaction.tags:
+            return False
+        return True
 
 
 @dataclass(frozen=True)
@@ -107,14 +131,21 @@ class MonthSummary:
 
     @property
     def balance(self) -> int:
+        """기록된 총수입에서 총지출을 빼 월 잔액을 반환한다. 실제 계좌 조회는 하지 않는다."""
         return self.income - self.expense
 
     @property
     def exceeded(self) -> bool:
+        """예산이 설정되어 있고 지출이 그 예산보다 큰 경우에만 True를 반환한다."""
         return self.budget is not None and self.expense > self.budget
 
     @property
     def usage_percent(self) -> str | None:
+        """예산 사용률을 소수 첫째 자리 문자열로 반환하며 미설정이면 None을 반환한다.
+
+        지출/예산을 0.1% 단위 정수로 반올림한 뒤 문자열로 조합한다.
+        float로 바꾸지 않아 큰 금액의 변환 오류를 피하며 초과 판정은 exceeded가 따로 한다.
+        """
         if self.budget is None:
             return None
         # 원 단위 정수를 끝까지 유지하고 표시 시에만 0.1% 단위로 반올림한다.

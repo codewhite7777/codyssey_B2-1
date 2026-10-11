@@ -9,6 +9,7 @@ from tests.common import ServiceCase
 
 class StateMachineTests(ServiceCase):
     def scenario(self, seed):
+        """고정 시드로 150회 추가·수정·삭제를 수행하며 매번 메모리 기준 모델과 저장·검색·합계를 비교한다."""
         randomizer = random.Random(seed)
         expected = {}
         for step in range(150):
@@ -38,10 +39,13 @@ class StateMachineTests(ServiceCase):
                 self.assertEqual(summary.expense, sum(value.amount for value in expected.values() if value.date.startswith("2026-10")))
 
     def test_seed_42(self):
+        """시드 42의 150단계 거래 변경 결과를 기준 모델과 대조한다."""
         self.scenario(42)
 
     def test_seed_20261009(self):
+        """시드 20261009의 150단계 거래 변경 결과를 기준 모델과 대조한다."""
         self.scenario(20261009)
 
     def test_seed_98765(self):
+        """시드 98765의 150단계 거래 변경 결과를 기준 모델과 대조한다."""
         self.scenario(98765)

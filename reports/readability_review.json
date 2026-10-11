@@ -1,0 +1,163 @@
+{
+  "review_date_kst": "2026-10-12",
+  "base_commit": "ffc8c87f7118bd777de8cb371e12ace2c7f2a0ff",
+  "verification_method": "GitHub API current main + Git subtree SHA match for budget_app/tests/tools/examples. Direct clone unavailable due DNS; modified files tested locally and remote hashes must be compared after publication.",
+  "tests": {
+    "timestamp_utc": "2026-10-11T20:52:39.792078+00:00",
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "tests_run": 185,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "elapsed_seconds": 4.554,
+    "by_module": {
+      "tests.test_cli": 32,
+      "tests.test_csv_io": 27,
+      "tests.test_invariants": 3,
+      "tests.test_models": 13,
+      "tests.test_readability": 10,
+      "tests.test_service": 46,
+      "tests.test_storage": 27,
+      "tests.test_validators": 27
+    },
+    "python_3_10_ast_syntax_errors": [],
+    "application_import_roots": [
+      "argparse",
+      "calendar",
+      "collections",
+      "contextlib",
+      "csv",
+      "dataclasses",
+      "datetime",
+      "functools",
+      "heapq",
+      "json",
+      "os",
+      "pathlib",
+      "re",
+      "sys",
+      "tempfile",
+      "typing",
+      "uuid"
+    ],
+    "non_standard_library_imports": [],
+    "note": "문법 검사는 Python 3.10 실제 인터프리터 실행/정적 타입 검사와 다릅니다. CLI 하위 프로세스는 -S로 site 패키지 없이 실행합니다."
+  },
+  "additional_runs": {
+    "python_minus_S": "185 passed",
+    "cli_subprocess_subset": "26 passed (included in 185)",
+    "end_to_end_demo": "19 CLI commands, expected outputs and exit codes passed",
+    "compileall": "passed"
+  },
+  "docstrings": {
+    "budget_app": {
+      "python_files": 10,
+      "functions": 79,
+      "documented": 79,
+      "undocumented": 0
+    },
+    "tests": {
+      "python_files": 10,
+      "functions": 204,
+      "documented": 204,
+      "undocumented": 0
+    },
+    "tools": {
+      "python_files": 5,
+      "functions": 10,
+      "documented": 10,
+      "undocumented": 0
+    }
+  },
+  "application_structure": {
+    "modules_before": 10,
+    "modules_after": 10,
+    "functions_before": 79,
+    "functions_after": 79,
+    "documented_functions_before": 18,
+    "documented_functions_after": 79,
+    "lines_before": 1123,
+    "lines_after": 1470
+  },
+  "benchmark": {
+    "read": {
+      "records": 100000,
+      "file_bytes": 13020000,
+      "list_20": {
+        "seconds": 0.001746,
+        "peak_traced_bytes": 30047
+      },
+      "search_no_match_full_scan": {
+        "seconds": 3.956066,
+        "peak_traced_bytes": 48568
+      },
+      "summary": {
+        "seconds": 4.041965,
+        "peak_traced_bytes": 41784
+      },
+      "expected_totals_verified": {
+        "income": 10000000,
+        "expense": 9000000,
+        "balance": 1000000
+      },
+      "export": {
+        "seconds": 4.808724,
+        "peak_traced_bytes": 200941
+      },
+      "post_operation_count_verified": 100000
+    },
+    "add": {
+      "records": 100000,
+      "file_bytes": 13020000,
+      "add": {
+        "seconds": 11.489532,
+        "peak_traced_bytes": 10754422
+      },
+      "post_operation_count_verified": 100001
+    },
+    "update": {
+      "records": 100000,
+      "file_bytes": 13020000,
+      "update": {
+        "seconds": 11.443711,
+        "peak_traced_bytes": 10755235
+      },
+      "post_operation_count_verified": 100000
+    },
+    "delete": {
+      "records": 100000,
+      "file_bytes": 13020000,
+      "delete": {
+        "seconds": 12.082934,
+        "peak_traced_bytes": 10759683
+      },
+      "post_operation_count_verified": 99999
+    },
+    "import": {
+      "timestamp_utc": "2026-10-11T20:55:20.662576+00:00",
+      "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+      "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+      "records": 100000,
+      "measurement": {
+        "seconds": 10.963569,
+        "peak_traced_bytes": 63601223
+      },
+      "verified_count": 100000,
+      "verified_expense": 10000000,
+      "note": "빈 거래 저장소에 10만 행 CSV를 전체 검증 후 반영. tracemalloc 활성, 단일 실행. 입력 버퍼와 ID 집합은 건수에 비례해 증가한다."
+    }
+  },
+  "intermediate_issues": [
+    "A misplaced docstring before a nested decorator caused a local syntax error; placement corrected and the complete suite rerun successfully before publication.",
+    "Combined 100000-row add/update/delete benchmark exceeded the execution tool time limit; rerun as individual operations, all expected counts verified."
+  ],
+  "not_verified": [
+    "Python 3.10 interpreter execution",
+    "macOS/Windows execution",
+    "GitHub Actions execution",
+    "power-loss durability",
+    "external static type checker"
+  ],
+  "rubric_note": "Original checklist items 1-4 used; no supplied numeric weights or pass threshold. Docstring completeness is user-requested code quality, not an invented scoring rule."
+}
