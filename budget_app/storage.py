@@ -1,4 +1,14 @@
-"""파일 입출력: 줄 단위 읽기, 스키마 검사, 단일 파일 원자적 교체, 접근 잠금."""
+"""영구 저장을 담당하는 파일 I/O 계층: JSONL 변환, 스키마 검사, 잠금과 안전한 교체.
+
+읽기: iter_jsonl → transaction_from_record → TransactionRepository.iter_transactions.
+쓰기: 서비스의 변경 결과 → replace_all/save → atomic_text → write_record.
+거래·카테고리·예산은 각각의 파일에, 코드의 객체는 JSON 문자열로 변환해 저장한다.
+
+일반 읽기 제너레이터는 거래를 한 건씩 yield한다. 반면 @contextmanager 함수의 yield는
+with 안에서 사용할 파일 핸들이나 작업 구간을 한 번 제공하는 용도다.
+잠금(session)은 동시 작업 충돌, 교체(atomic_text)는 미완성 파일 노출을 각각 막는다.
+모든 파일시스템 장애·정전·외부 편집기 변경까지 보장하는 데이터베이스는 아니다.
+"""
 
 import json
 import os
@@ -13,6 +23,7 @@ from .errors import AppError, ConflictError, StorageError, ValidationError
 from .models import MonthlyBudget, Transaction, transaction_key
 from .validators import TransactionType, validate_category_name
 
+# 세 영구 저장 파일의 역할을 고정한다. LOCK_NAME 파일은 거래 데이터가 아닌 작업 중 표시다.
 DATA_NAMES = ("transactions.jsonl", "categories.jsonl", "budgets.jsonl")
 LOCK_NAME = ".budget_app.lock"
 
@@ -46,6 +57,7 @@ def atomic_text(path: Path) -> Iterator[TextIO]:
     교체 전 실패하면 원본을 유지하고 finally에서 남은 임시 파일을 정리한다.
     출력 폴더가 있어야 하며 단일 파일 교체이지 다중 파일 커밋·정전 내구성 보장은 아니다.
     """
+    # [교체 1] 원본을 w로 열어 비우지 않는다. 같은 파일시스템의 임시 파일부터 만든다.
     fd, name = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent)
     temporary = Path(name)
     try:
@@ -55,11 +67,16 @@ def atomic_text(path: Path) -> Iterator[TextIO]:
             os.close(fd)
             raise
         with stream:
+            # [교체 2] 호출자의 `with atomic_text(...) as stream` 본문이 이 핸들에 기록한다.
+            # 본문이 실패하면 예외가 이 yield로 돌아와 아래 교체 단계를 건너뛴다.
             yield stream
+            # [교체 3] 정상 작성 뒤 Python 버퍼를 비우고 운영체제에 파일 동기화를 요청한다.
             stream.flush()
             os.fsync(stream.fileno())
+        # [교체 4] 파일이 닫힌 뒤 교체한다. 완료 후 출력에 실패해도 이미 저장된 파일은 되돌리지 않는다.
         os.replace(temporary, path)
     finally:
+        # 실패 시 남은 임시 파일 정리. 성공했다면 replace가 옮겨 이미 없으므로 무시한다.
         temporary.unlink(missing_ok=True)
 
 
@@ -81,6 +98,7 @@ def iter_jsonl(path: Path) -> Generator[tuple[int, dict[str, object]], None, Non
     line_number = 0
     try:
         with path.open("r", encoding="utf-8", newline="") as stream:
+            # 파일 객체의 반복은 다음 한 줄씩 읽는다. 행 번호는 손상 위치를 사용자에게 알려 준다.
             for line_number, line in enumerate(stream, 1):
                 try:
                     record = json.loads(
@@ -129,6 +147,8 @@ def transaction_from_record(record: dict[str, object]) -> Transaction:
 
 
 class TransactionRepository:
+    """거래 파일을 읽고 교체한다. 업무 규칙과 전역 ID 검사는 서비스가 담당한다."""
+
     def __init__(self, path: Path) -> None:
         """거래 파일 경로만 보관한다. 파일 생성·잠금은 DataStore에서 처리한다."""
         self.path = path
@@ -169,6 +189,8 @@ class TransactionRepository:
 
 
 class CategoryStore:
+    """카테고리 이름 집합과 categories.jsonl을 서로 변환한다."""
+
     def __init__(self, path: Path) -> None:
         """카테고리 파일 경로를 보관한다. 생성자 자체에서는 파일에 접근하지 않는다."""
         self.path = path
@@ -202,6 +224,8 @@ class CategoryStore:
 
 
 class BudgetStore:
+    """월별 예산 사전과 budgets.jsonl을 서로 변환한다."""
+
     def __init__(self, path: Path) -> None:
         """예산 파일 경로를 보관한다. 실제 읽기·쓰기는 load/save에서 수행한다."""
         self.path = path
@@ -235,11 +259,14 @@ class BudgetStore:
 
 
 class DataStore:
+    """저장 경로와 세 저장소를 묶고, 서비스가 사용할 잠금·초기화 경계를 제공한다."""
+
     def __init__(self, directory: str | Path) -> None:
         """저장 폴더를 절대 경로로 정리하고 거래·카테고리·예산 저장소를 구성한다.
 
         경로 계산만 하므로 help를 출력할 때는 데이터 파일이 생성되지 않는다.
         """
+        # 상대 경로는 실행한 현재 폴더 기준이다. 다른 위치에서 실행하면 다른 가계부가 될 수 있다.
         self.directory = Path(directory).expanduser().resolve()
         self.transactions = TransactionRepository(self.directory / DATA_NAMES[0])
         self.categories = CategoryStore(self.directory / DATA_NAMES[1])
@@ -268,6 +295,7 @@ class DataStore:
             finally:
                 os.close(fd)
             self._initialize_locked()
+            # `with self.store.session():` 본문의 실제 서비스 작업이 수행되는 구간이다.
             yield
         finally:
             lock.unlink(missing_ok=True)

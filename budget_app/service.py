@@ -1,4 +1,13 @@
-"""업무 규칙: 등록 확인, CRUD, 검색, 집계, 전체 성공/미반영 CSV 가져오기."""
+"""CLI의 요청을 데이터 검증·저장·검색·집계로 연결하는 업무 규칙 계층.
+
+호출자는 cli.main이고 파일 작업은 DataStore/각 Store에 위임한다.
+사용자에게 질문하거나 출력하지 않으므로 같은 메서드를 단위·통합 테스트에서 직접 호출한다.
+
+쓰기는 검증 → session 잠금 → 기존 상태 확인 → 변경 결과 생성 → 원자적 파일 교체 순서다.
+읽기는 session → 저장소 제너레이터 → 조건 검사/합계 누적 순서다.
+읽기 중 list/search는 거래 전체를 보관하지 않지만, 쓰기의 ID 집합과 import의 신규 목록은
+거래 수에 비례하는 메모리가 필요하다. 이 차이를 함수별 docstring에 명시한다.
+"""
 
 import calendar
 import heapq
@@ -58,6 +67,12 @@ def export_filter(month: str | None, start: str | None, end: str | None) -> Sear
 
 
 class BudgetService:
+    """하나의 저장 폴더를 대상으로 거래·카테고리·예산 기능을 제공한다.
+
+    public 메서드가 잠금 경계를 소유하고 _로 시작하는 보조 메서드를 호출한다.
+    _inspect/_rewrite 같은 내부 메서드는 단독 명령이 아니며 잠금 안에서만 사용한다.
+    """
+
     def __init__(self, directory: str | Path = "data") -> None:
         """지정한 폴더를 사용하는 DataStore를 준비한다. 실제 초기화·잠금은 작업 시 수행한다."""
         self.store = DataStore(directory)
@@ -164,6 +179,7 @@ class BudgetService:
         임시 모델 검증 후 잠금 안에서 실제 ID를 부여하고 _rewrite로 최신순을 유지한다.
         저장에 성공한 Transaction을 반환하며 화면 입력·출력은 하지 않는다.
         """
+        # [저장 1] * 뒤 인자는 이름을 붙여 전달한다. draft는 저장용 ID를 받기 전의 검증용 거래다.
         # 파일을 만들기 전에 값 자체를 검사한다. 실제 고유 ID는 잠금 안에서 생성한다.
         draft = Transaction(
             id="pending", type=type, date=date, amount=amount,
@@ -172,8 +188,10 @@ class BudgetService:
         with self.store.session():
             categories = self.store.categories.load()
             self._require_category(category, categories)
+            # [저장 2] 입력 대기 중 바뀐 분류/ID 상태를 잠금 안에서 다시 확인한다.
             ids, _ = self._inspect(categories)
             transaction = replace(draft, id=self._new_id(ids))
+            # [저장 3] 정렬 위치에 삽입해 파일 교체까지 끝낸 뒤 CLI에 실제 ID를 돌려준다.
             self._rewrite(categories, replacement=transaction)
             return transaction
 
@@ -191,10 +209,13 @@ class BudgetService:
             삽입할 거래가 가장 오래되었거나 파일이 비었다면 순회 끝에서 전달한다.
             replacement가 없을 때는 삭제 대상 외의 기존 거래만 전달한다.
             """
+            # add: 새 거래만 삽입 / update: 이전 ID 제외+사본 삽입 / delete: 이전 ID만 제외.
+            # 삭제에서는 삽입할 거래가 없으므로 처음부터 삽입 완료 상태로 둔다.
             inserted = replacement is None
             with closing(self._checked_transactions(categories)) as source:
                 for current in source:
                     if current.id == excluded:
+                        # 파일에서 행을 직접 지우는 대신 새 파일에 그 거래를 전달하지 않는다.
                         continue
                     if (
                         replacement is not None
@@ -206,6 +227,7 @@ class BudgetService:
                     yield current
                 if replacement is not None and not inserted:
                     yield replacement
+        # merged() 호출만으로는 읽지 않는다. replace_all의 for가 한 건씩 요청하며 임시 파일에 쓴다.
         with closing(merged()) as transactions:
             self.store.transactions.replace_all(transactions)
 
@@ -228,6 +250,8 @@ class BudgetService:
             _, original = self._inspect(categories, identifier)
             if original is None:
                 raise NotFoundError(f"없는 데이터입니다: {identifier}", "list 또는 search로 거래 ID를 확인하세요.")
+            # **changes는 {"amount": 55000} 같은 사전을 필드 인자로 펼친다.
+            # replace는 새 객체를 만들면서 __post_init__도 실행해 수정값을 재검증한다.
             transaction = replace(original, **changes)
             self._require_category(transaction.category, categories)
             self._rewrite(categories, excluded=identifier, replacement=transaction)
@@ -266,6 +290,7 @@ class BudgetService:
             with closing(self._checked_transactions(categories)) as transactions:
                 for transaction in transactions:
                     if filters.matches(transaction):
+                        # 호출자의 for에 한 건을 넘기고 멈춘다. 다음 요청에서 아래 줄부터 재개한다.
                         yield transaction
                         matched += 1
                         if limit is not None and matched >= limit:
@@ -276,6 +301,7 @@ class BudgetService:
 
         yield from으로 검색 제너레이터의 값과 종료·close 처리를 그대로 연결한다.
         """
+        # list는 검색 조건만 없는 search다. 별도 파일 읽기 로직을 중복 구현하지 않는다.
         yield from self.search(limit=limit)
 
     def set_budget(self, month: str, amount: int) -> None:
@@ -306,6 +332,7 @@ class BudgetService:
         with self.store.session():
             categories = self.store.categories.load()
             budget = self.store.budgets.load().get(month)
+            # 거래 자체가 아니라 합계와 개수만 남긴다. 새 CLI 실행마다 파일을 다시 읽어 계산한다.
             income = expense = count = 0
             amounts: dict[str, int] = defaultdict(int)
             with closing(self._checked_transactions(categories)) as transactions:
@@ -337,6 +364,7 @@ class BudgetService:
             path = self.store.check_external_path(source)
             categories = self.store.categories.load()
             ids, _ = self._inspect(categories)
+            # 아직 저장하지 않는다. 첫 오류에서 전체 미반영하려고 신규 거래를 준비 목록에 모은다.
             incoming: list[Transaction] = []
             with closing(iter_csv(path)) as rows:
                 for row in rows:
@@ -354,6 +382,7 @@ class BudgetService:
             # 여기까지는 검증·준비 단계다. 이후 병합 파일이 완성되어야 실제 반영한다.
             incoming.sort(key=transaction_key, reverse=True)
             with closing(self._checked_transactions(categories)) as current:
+                # 두 입력 모두 같은 기준의 내림차순이다. merge는 두 순서를 비교해 하나씩 전달한다.
                 merged = heapq.merge(current, incoming, key=transaction_key, reverse=True)
                 with closing(merged):
                     self.store.transactions.replace_all(merged)

@@ -1,4 +1,12 @@
-"""CLI 실행 경계에서 예외를 메시지와 종료 코드로 변환하는 공통 데코레이터."""
+"""명령 실행 전체의 오류 처리와 출력 안전성을 공통으로 제공한다.
+
+cli.main에 @handle_cli_errors를 붙이면 원래 main을 wrapped가 감싸게 된다.
+wrapped → main의 입력·서비스 호출·제너레이터 순회·출력 → 정상 0 또는 오류 코드.
+여기서 반환한 코드는 __main__.py의 SystemExit를 거쳐 실제 프로세스 종료 코드가 된다.
+
+재입력이 가능한 ValidationError는 cli.prompt가 먼저 처리한다.
+이 경계까지 올라온 오류는 명령을 종료한다. 데이터 변경을 되돌리는 롤백 함수는 아니다.
+"""
 
 import sys
 from collections.abc import Callable
@@ -7,6 +15,7 @@ from typing import ParamSpec
 
 from .errors import AppError
 
+# 감싸기 전 함수의 인자 모양을 보존하는 타입 표기다. 오류 처리와 입력 검증은 별도의 코드다.
 P = ParamSpec("P")
 
 
@@ -54,6 +63,7 @@ def handle_cli_errors(function: Callable[P, int]) -> Callable[P, int]:
         """
         try:
             return function(*args, **kwargs)
+        # 알려진 업무 오류는 오류 객체가 가진 원인·힌트·종료 코드를 그대로 사용한다.
         except AppError as exc:
             show_error(exc.message, exc.hint)
             return exc.exit_code

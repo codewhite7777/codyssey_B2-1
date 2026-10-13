@@ -1,0 +1,43 @@
+{
+  "timestamp_utc": "2026-10-13T02:37:44.331445+00:00",
+  "base_commit": "0745b63b2103144a7cb9c16236fd49a212ef9ec5",
+  "scope": "README, architecture, application docstrings/comments; no application executable AST changes",
+  "application_ast_equal_excluding_docstrings": {
+    "__init__.py": true,
+    "__main__.py": true,
+    "cli.py": true,
+    "csv_io.py": true,
+    "decorators.py": true,
+    "errors.py": true,
+    "models.py": true,
+    "service.py": true,
+    "storage.py": true,
+    "validators.py": true
+  },
+  "documented_function_counts": {
+    "budget_app": 79,
+    "tests": 208,
+    "tools": 10
+  },
+  "missing_function_docstrings": [],
+  "original_tests_tools_examples_unchanged": true,
+  "tests": {
+    "total": 187,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "new_readme_workflows": 2,
+    "cli_subset_included": 26
+  },
+  "no_site_suite_passed": true,
+  "demo_commands": 19,
+  "compileall_passed": true,
+  "not_performed": [
+    "direct git clone (DNS failure)",
+    "macOS/Windows execution",
+    "Python 3.10 interpreter execution",
+    "GitHub Actions",
+    "new 100000-record benchmark"
+  ],
+  "verification_note": "GitHub connector reads plus blob SHA matching. Remote publication is confirmed separately after commit/ref update."
+}

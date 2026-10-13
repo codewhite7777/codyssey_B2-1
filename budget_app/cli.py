@@ -1,4 +1,16 @@
-"""명령 해석과 대화형 입력/출력만 담당한다. 업무 규칙은 BudgetService에 있다."""
+"""사용자가 입력한 명령과 프로그램의 기능 사이를 연결하는 CLI 계층.
+
+CLI(Command-Line Interface)는 터미널의 명령을 읽고 결과를 출력하는 부분이다.
+이 파일의 위쪽은 파서·입력·출력 함수의 정의이고, 실제 분기 시작점은 아래 main이다.
+
+호출 흐름:
+    __main__.py → main → build_parser().parse_args() → BudgetService
+    add일 때: _add → prompt/검증 함수 → service.add → 저장 성공 출력
+    list/search일 때: 서비스가 준 제너레이터 → print_transactions의 for 순회
+
+여기서는 날짜별 합계를 계산하거나 JSONL을 직접 쓰지 않는다.
+함수의 인자·반환 계약은 docstring에, 호출 경계의 이유는 해당 줄의 주석에 둔다.
+"""
 
 import argparse
 import sys
@@ -16,6 +28,8 @@ from .validators import (
     validate_transaction_type,
 )
 
+# prompt는 금액이면 int, 날짜면 str, 태그면 tuple을 반환한다.
+# T는 전달한 변환 함수의 반환 자료형을 그대로 이어 준다는 타입 표기다.
 T = TypeVar("T")
 
 
@@ -66,6 +80,7 @@ def build_parser() -> ArgumentParser:
     listing = commands.add_parser("list", help="최신순 거래 목록")
     listing.add_argument("--limit", type=_positive, default=DEFAULT_LIMIT, help="출력 건수 (기본: 20)")
     search = commands.add_parser("search", help="조건을 모두 만족하는 거래 검색")
+    # from은 Python 예약어이므로 옵션 이름은 --from, 코드의 속성 이름은 start로 나눈다.
     search.add_argument("--from", dest="start", help="시작일 (포함, YYYY-MM-DD)")
     search.add_argument("--to", dest="end", help="종료일 (포함, YYYY-MM-DD)")
     search.add_argument("--category", help="등록된 카테고리, 정확히 일치")
@@ -121,6 +136,7 @@ def prompt(label: str, parse: Callable[[str], T]) -> T:
     EOF나 Ctrl+C는 잡지 않아 main에서 취소 종료 코드로 처리하게 한다.
     """
     while True:
+        # input()의 반환값은 항상 문자열이다. parse_amount 등이 필요한 자료형으로 바꾼다.
         raw = input(label)
         try:
             return parse(raw)
@@ -135,6 +151,8 @@ def print_transactions(transactions: Generator[Transaction, None, None]) -> None
     출력 실패나 순회 종료 시 제너레이터를 닫아 열린 파일과 잠금도 정리한다.
     """
     count = 0
+    # 이 for가 값을 요청할 때 service.search와 파일 읽기가 실제로 진행된다.
+    # 출력 실패나 조기 종료에서도 close가 안쪽 with와 파일 잠금을 정리하게 한다.
     with closing(transactions):
         for transaction in transactions:
             if count == 0:
@@ -176,13 +194,16 @@ def print_summary(summary: MonthSummary, top: int) -> None:
 def _add(service: BudgetService) -> None:
     """등록된 카테고리를 보여 주고 거래 필드를 대화형으로 입력받아 저장한다.
 
-    빈 카테고리 목록이면 등록을 안내하며, 각 필드는 prompt로 재입력 검증한다.
+    빈 카테고리 목록이면 등록을 안내한다. 날짜·타입·카테고리·금액·태그는
+    prompt로 재입력 검증하고, 메모는 input으로 한 줄 문자열을 받는다.
     입력 대기 중에는 파일을 잠그지 않고, 저장 직전 서비스에서 등록 여부를 재검사한다.
     """
+    # [추가 1] 목록을 조회한 짧은 세션은 여기서 끝난다. 사람이 입력하는 동안 잠그지 않는다.
     categories = set(service.list_categories())
     if not categories:
         raise ValidationError("등록된 카테고리가 없습니다.", "category add로 카테고리를 먼저 등록한 뒤 add를 실행하세요.")
     print("등록된 카테고리: " + ", ".join(safe_text(name) for name in sorted(categories)))
+    # [추가 2] 사용자의 문자열을 항목별로 변환·검증한다. 잘못된 필드만 다시 묻는다.
     date = prompt("날짜(YYYY-MM-DD): ", lambda value: validate_date(value.strip()))
     kind = prompt("타입(income/expense): ", lambda value: validate_transaction_type(value.strip()))
 
@@ -200,6 +221,7 @@ def _add(service: BudgetService) -> None:
     amount = prompt("금액(양수 정수): ", parse_amount)
     memo = input("메모(선택): ")
     tags = prompt("태그(쉼표 구분, 선택): ", parse_tags)
+    # [추가 3] amount는 int, tags는 tuple이 된 상태다. 서비스가 다시 확인하고 실제로 저장한다.
     transaction = service.add(date=date, type=kind, category=category, amount=amount, memo=memo, tags=tags)
     print(f"[저장 완료] id={transaction.id}")
 
@@ -212,8 +234,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     실제 제너레이터 순회와 stdout 동기화까지 데코레이터 안에서 실행하므로
     늦게 발생한 읽기·출력 오류도 원인·힌트 및 비정상 종료 코드로 변환된다.
     """
+    # 1. argv=None이면 터미널 인자를 읽는다. 테스트에서는 문자열 목록을 직접 전달할 수 있다.
+    #    예: ["list", "--limit", "3"] → args.command="list", args.limit=3.
     args = build_parser().parse_args(argv)
+    # 2. 저장소 구성을 준비한다. 실제 파일 생성은 서비스가 session에 들어갈 때 한다.
     service = BudgetService(args.data_dir)
+    # 3. 선택한 명령 하나만 실행하고 결과를 출력한다.
     if args.command == "add":
         _add(service)
     elif args.command == "list":
@@ -249,6 +275,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                 service.remove_category(name)
                 print(f"[삭제 완료] category={safe_text(name)}")
     elif args.command == "update":
+        # 생략한 옵션은 SUPPRESS 덕분에 없다. ""는 존재하는 값이므로 그대로 수정 요청에 남긴다.
+        # Namespace를 사전으로 바꾼 뒤 거래 필드만 골라 **changes로 서비스에 전달한다.
         changes = {key: value for key, value in vars(args).items()
                    if key in {"date", "type", "category", "amount", "memo", "tags"}}
         if "tags" in changes:
@@ -264,5 +292,6 @@ def main(argv: Sequence[str] | None = None) -> int:
     elif args.command == "export":
         count = service.export_csv(args.out, month=args.month, start=args.start, end=args.end)
         print(f"[완료] {safe_text(args.out)} ({count} records)")
+    # 4. 마지막 출력까지 여기서 완료해야 지연된 출력 오류도 @handle_cli_errors가 잡을 수 있다.
     sys.stdout.flush()
     return 0

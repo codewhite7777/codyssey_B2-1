@@ -1,4 +1,13 @@
-"""파일 포맷과 화면 출력에 의존하지 않는 도메인 데이터 모델."""
+"""거래·월 예산·검색 조건·요약 결과의 데이터 구조와 값 자체의 규칙.
+
+입력 문자열 변환은 validators, 카테고리 등록/ID 중복 확인은 service,
+JSONL 변환은 storage가 담당한다. 이 파일은 input/print/파일 작업을 하지 않는다.
+
+Transaction 생성 → dataclass가 필드 초기화 → __post_init__에서 검증.
+수정은 원본 필드를 바꾸는 대신 dataclasses.replace로 새 객체를 만들어 재검증한다.
+예: amount=15000은 금액이고 type="expense"가 지출을 뜻하므로 음수를 저장하지 않는다.
+frozen=True는 객체 재할당 제한이지, 디스크 파일의 원자적 저장 기능이 아니다.
+"""
 
 from dataclasses import dataclass
 
@@ -66,11 +75,14 @@ def transaction_key(transaction: Transaction) -> tuple[str, str]:
 
     호출 측이 내림차순으로 사용한다. 같은 날짜의 ID 순서는 등록 시각순이 아니다.
     """
+    # 검증된 고정 폭 YYYY-MM-DD 문자열은 문자열 비교와 날짜 순서가 일치한다.
     return transaction.date, transaction.id
 
 
 @dataclass(frozen=True)
 class SearchFilter:
+    """검색 조건 묶음. None은 조건 생략이며 matches가 한 거래의 일치 여부를 판정한다."""
+
     start: str | None = None
     end: str | None = None
     category: str | None = None
@@ -105,6 +117,8 @@ class SearchFilter:
         기간은 양 끝을 포함하고, 메모는 대소문자 없는 부분 문자열로 비교한다.
         카테고리·타입·태그는 정확히 비교하며 하나라도 다르면 즉시 False를 반환한다.
         """
+        # 예: --category food --type expense는 둘 다 맞아야 한다(AND).
+        # 기간의 경계 날짜 자체는 제외하지 않도록 <와 >로 범위 밖만 거른다.
         if self.start is not None and transaction.date < self.start:
             return False
         if self.end is not None and transaction.date > self.end:
@@ -122,6 +136,12 @@ class SearchFilter:
 
 @dataclass(frozen=True)
 class MonthSummary:
+    """서비스가 계산한 결과 묶음. count는 거래 수, top_expenses는 (분류, 합계)의 튜플이다.
+
+    이 객체를 만드는 summary가 값과 예산을 검증·계산한다. 자체 입력 폼이 아니며,
+    balance 등의 property는 저장된 합계로 계산할 뿐 파일을 다시 읽지 않는다.
+    """
+
     month: str
     count: int
     income: int
@@ -149,5 +169,6 @@ class MonthSummary:
         if self.budget is None:
             return None
         # 원 단위 정수를 끝까지 유지하고 표시 시에만 0.1% 단위로 반올림한다.
+        # 15000/50000 → 300(0.1% 단위) → "30.0". 화면 반올림과 실제 초과 판정은 분리한다.
         tenths = (self.expense * 1000 + self.budget // 2) // self.budget
         return f"{tenths // 10}.{tenths % 10}"

@@ -1,7 +1,15 @@
-"""계층 간에 원인과 해결 힌트를 전달한다. 화면 출력은 CLI 경계의 책임이다."""
+"""계층 사이에서 원인·해결 힌트·종료 코드를 전달하는 애플리케이션 오류들.
+
+검증/서비스/저장소는 오류를 raise하고, CLI 경계의 데코레이터가 사용자에게 출력한다.
+ValidationError 계열은 입력·사용법 오류(2), 다른 AppError 계열은 작업 실패(1)다.
+예: 없는 거래 → NotFoundError → show_error → main의 반환값 1 → SystemExit(1).
+파일 접근 자체에서 발생하는 OSError는 데코레이터가 따로 처리할 수도 있다.
+"""
 
 
 class AppError(Exception):
+    """원인과 해결 힌트가 있는 오류의 공통 부모. 직접 print나 프로세스 종료를 하지 않는다."""
+
     exit_code = 1
 
     def __init__(self, message: str, hint: str) -> None:
@@ -16,6 +24,8 @@ class AppError(Exception):
 
 
 class ValidationError(AppError):
+    """입력값 또는 조건을 고쳐야 하는 오류. 대화형 입력에서는 재입력에 사용할 수 있다."""
+
     exit_code = 2
 
 

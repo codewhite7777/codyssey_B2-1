@@ -1,4 +1,13 @@
-"""CSV 교환 스키마. 가져오기 검증과 내보내기를 내부 JSONL 저장에서 분리한다."""
+"""CSV 교환 형식과 내부 거래 모델을 연결한다. 내부 영구 저장 포맷은 JSONL이다.
+
+가져오기: service.import_csv → iter_csv → 헤더/행 검증 → 변환된 사전 yield.
+사전의 source_line은 오류 보고용이고, ID는 서비스가 새로 만든다.
+여기서 줄 단위로 읽더라도 서비스는 전체 성공 정책을 위해 신규 거래를 목록에 모은다.
+
+내보내기: service.export_csv → export_rows → DictWriter → CSV 텍스트.
+CSV 열 구분 쉼표는 csv 모듈이 해석하고, 해석된 tags 열 내부의 쉼표만 별도로 나눈다.
+예: "meal,lunch"는 CSV의 한 열이며 프로그램 안에서는 두 태그가 된다.
+"""
 
 import csv
 from collections.abc import Generator
@@ -22,6 +31,8 @@ REQUIRED_COLUMNS = frozenset(CSV_COLUMNS[:4])
 
 
 class CSVTransactionInput(TypedDict):
+    """검증 후 서비스로 넘길 사전의 필드 계약. TypedDict 자체가 런타임 검증을 하지는 않는다."""
+
     date: str
     type: TransactionType
     category: str
@@ -40,6 +51,7 @@ def iter_csv(path: Path) -> Generator[CSVTransactionInput, None, None]:
     reader = None
     try:
         with path.open("r", encoding="utf-8-sig", newline="") as stream:
+            # utf-8-sig는 입력의 BOM도 허용한다. newline=""로 CSV 모듈이 개행을 직접 다루게 한다.
             reader = csv.DictReader(stream, strict=True)
             fields = reader.fieldnames
             if (
@@ -54,6 +66,7 @@ def iter_csv(path: Path) -> Generator[CSVTransactionInput, None, None]:
                 )
             for row in reader:
                 line = reader.line_num
+                # 남는 열은 None 키, 빠진 열은 None 값으로 나타난다. 조용히 자르거나 채우지 않는다.
                 if None in row or any(value is None for value in row.values()):
                     raise ImportDataError(
                         f"CSV {line}행 부근: 열 개수가 헤더와 다릅니다. imported=0 (전체 미반영)",
@@ -66,6 +79,7 @@ def iter_csv(path: Path) -> Generator[CSVTransactionInput, None, None]:
                         "category": validate_category_name(row["category"].strip()),
                         "amount": parse_amount(row["amount"]),
                         "memo": row.get("memo", ""),
+                        # CSV 한 행을 split(",")하지 않는다. DictReader로 꺼낸 이 필드만 분리한다.
                         "tags": parse_tags(row.get("tags", "")),
                         "source_line": line,
                     }

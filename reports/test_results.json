@@ -1,18 +1,19 @@
 {
-  "timestamp_utc": "2026-10-11T20:52:39.792078+00:00",
+  "timestamp_utc": "2026-10-13T02:35:51.517967+00:00",
   "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
   "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
-  "tests_run": 185,
+  "tests_run": 187,
   "failures": 0,
   "errors": 0,
   "skipped": 0,
-  "elapsed_seconds": 4.554,
+  "elapsed_seconds": 6.414,
   "by_module": {
     "tests.test_cli": 32,
     "tests.test_csv_io": 27,
     "tests.test_invariants": 3,
     "tests.test_models": 13,
     "tests.test_readability": 10,
+    "tests.test_readme_workflows": 2,
     "tests.test_service": 46,
     "tests.test_storage": 27,
     "tests.test_validators": 27
