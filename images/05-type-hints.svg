@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="620" rx="18" fill="#ffffff"/>
+  <text x="500" y="42" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">타입 힌트 — 함수의 "계약서"를 코드에 적어두기</text>
+  <text x="500" y="68" text-anchor="middle" font-size="14" fill="#475569">Python은 실행할 때 타입을 강제하지 않는다. 대신 사람·에디터·검사 도구가 읽고 실수를 미리 잡는다.</text>
+
+  <!-- signature -->
+  <rect x="30" y="90" width="940" height="128" rx="14" fill="#0f172a"/>
+  <text x="60" y="138" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="17" fill="#e2e8f0" xml:space="preserve"><tspan fill="#c4b5fd">def</tspan> total_expense(items: <tspan fill="#86efac">Iterable[Transaction]</tspan>, month: <tspan fill="#86efac">str</tspan>) -&gt; <tspan fill="#fcd34d">int</tspan>:</text>
+  <circle cx="68" cy="170" r="6" fill="#86efac"/>
+  <text x="82" y="175" font-size="14" font-weight="700" fill="#86efac">입력 약속: "거래 묶음과 'YYYY-MM' 문자열을 주세요"</text>
+  <circle cx="520" cy="170" r="6" fill="#fcd34d"/>
+  <text x="534" y="175" font-size="14" font-weight="700" fill="#fcd34d">출력 약속: "정수(지출 합계)를 돌려줄게요"</text>
+  <text x="60" y="203" font-size="12.5" fill="#94a3b8">→ 함수 안을 읽지 않아도 무엇을 넣고 무엇을 받는지 알 수 있다</text>
+
+  <!-- comparison -->
+  <text x="500" y="254" text-anchor="middle" font-size="17" font-weight="700" fill="#0f172a">같은 실수: input()으로 받은 금액 "15000"(문자열)을 int로 안 바꾸고 저장</text>
+
+  <rect x="30" y="270" width="455" height="190" rx="14" fill="#fff1f2" stroke="#fda4af" stroke-width="2"/>
+  <text x="52" y="300" font-size="16" font-weight="700" fill="#be123c">타입 힌트·검사 없음</text>
+  <rect x="52" y="316" width="110" height="46" rx="8" fill="#fff"/>
+  <text x="107" y="344" text-anchor="middle" font-size="13" fill="#334155">add 저장 OK</text>
+  <line x1="165" y1="339" x2="195" y2="339" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="198" y="316" width="110" height="46" rx="8" fill="#fff"/>
+  <text x="253" y="344" text-anchor="middle" font-size="13" fill="#334155">며칠 뒤…</text>
+  <line x1="311" y1="339" x2="341" y2="339" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="344" y="316" width="122" height="46" rx="8" fill="#fecdd3" stroke="#e11d48"/>
+  <text x="405" y="344" text-anchor="middle" font-size="13" font-weight="700" fill="#be123c">summary 폭발</text>
+  <text x="52" y="392" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12" fill="#be123c">TypeError: unsupported operand type(s)</text>
+  <text x="52" y="410" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12" fill="#be123c">for +: 'int' and 'str'</text>
+  <text x="52" y="440" font-size="13.5" fill="#334155">• 원인과 증상이 멀리 떨어져 찾기 어렵다</text>
+
+  <rect x="515" y="270" width="455" height="190" rx="14" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="537" y="300" font-size="16" font-weight="700" fill="#15803d">타입 힌트 + 에디터 / mypy</text>
+  <rect x="537" y="316" width="410" height="46" rx="8" fill="#fff"/>
+  <text x="551" y="337" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">Transaction(..., amount="15000", ...)</text>
+  <path d="M676,346 q4,4 8,0 t8,0 t8,0 t8,0 t8,0 t8,0 t8,0 t8,0 t8,0" fill="none" stroke="#dc2626" stroke-width="1.6"/>
+  <text x="537" y="392" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12" fill="#15803d">error: Argument "amount" to "Transaction" has</text>
+  <text x="537" y="410" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12" fill="#15803d">incompatible type "str"; expected "int"</text>
+  <text x="537" y="440" font-size="13.5" fill="#334155">• 실행 전에, 실수한 바로 그 줄에서 알려준다</text>
+
+  <!-- benefits -->
+  <rect x="30" y="482" width="300" height="114" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="180" y="514" text-anchor="middle" font-size="16" font-weight="700" fill="#1d4ed8">① 읽는 문서</text>
+  <text x="180" y="542" text-anchor="middle" font-size="13.5" fill="#334155">계층 사이에 무엇이 오가는지</text>
+  <text x="180" y="564" text-anchor="middle" font-size="13.5" fill="#334155">시그니처만 보고 안다</text>
+  <rect x="350" y="482" width="300" height="114" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="500" y="514" text-anchor="middle" font-size="16" font-weight="700" fill="#1d4ed8">② 에디터 도움</text>
+  <text x="500" y="542" text-anchor="middle" font-size="13.5" fill="#334155">t. 을 치면 date, amount …</text>
+  <text x="500" y="564" text-anchor="middle" font-size="13.5" fill="#334155">자동완성 · 오타 경고</text>
+  <rect x="670" y="482" width="300" height="114" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="820" y="514" text-anchor="middle" font-size="16" font-weight="700" fill="#1d4ed8">③ 실수 조기 발견</text>
+  <text x="820" y="542" text-anchor="middle" font-size="13.5" fill="#334155">str/int, None 누락 같은 실수를</text>
+  <text x="820" y="564" text-anchor="middle" font-size="13.5" fill="#334155">실행 전에 잡는다</text>
+</svg>

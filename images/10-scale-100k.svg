@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif">
+  <rect width="1000" height="640" rx="18" fill="#ffffff"/>
+  <text x="500" y="42" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">거래가 10만 건이 되면 — 어디가 느려지나?</text>
+  <text x="500" y="68" text-anchor="middle" font-size="14" fill="#475569">메모리는 제너레이터 덕분에 괜찮다. 문제는 "매번 파일을 처음부터 끝까지 읽는 시간"이다.</text>
+
+  <!-- table header -->
+  <rect x="30" y="88" width="940" height="40" rx="10" fill="#f1f5f9"/>
+  <text x="50" y="114" font-size="14" font-weight="700" fill="#334155">명령</text>
+  <text x="200" y="114" font-size="14" font-weight="700" fill="#334155">지금 구조에서 읽는/쓰는 양 (막대 = 10만 줄)</text>
+  <text x="790" y="114" font-size="14" font-weight="700" fill="#334155">병목 정도</text>
+
+  <g font-size="13.5" fill="#334155">
+    <text x="50" y="160" font-weight="700">add</text>
+    <rect x="200" y="146" width="560" height="20" rx="6" fill="#fdba74"/>
+    <text x="210" y="161" font-size="12" fill="#7c2d12">다음 id 계산하려고 전체 읽기 (쓰기는 1줄)</text>
+    <text x="790" y="161" fill="#c2410c">중간</text>
+
+    <text x="50" y="200" font-weight="700">list / search</text>
+    <rect x="200" y="186" width="560" height="20" rx="6" fill="#fdba74"/>
+    <text x="210" y="201" font-size="12" fill="#7c2d12">최신 N건 고르려고 전체 읽기</text>
+    <text x="790" y="201" fill="#c2410c">중간</text>
+
+    <text x="50" y="240" font-weight="700">summary</text>
+    <rect x="200" y="226" width="560" height="20" rx="6" fill="#fdba74"/>
+    <text x="210" y="241" font-size="12" fill="#7c2d12">한 달치만 필요한데 전체 읽기</text>
+    <text x="790" y="241" fill="#c2410c">중간</text>
+
+    <text x="50" y="280" font-weight="700">update / delete</text>
+    <rect x="200" y="266" width="560" height="20" rx="6" fill="#f87171"/>
+    <rect x="200" y="290" width="560" height="10" rx="4" fill="#ef4444"/>
+    <text x="210" y="281" font-size="12" fill="#7f1d1d">1건 고치려고 전체 읽기 + 전체 다시 쓰기</text>
+    <text x="790" y="285" font-weight="700" fill="#be123c">가장 큼 (읽기+쓰기)</text>
+
+    <text x="50" y="330" font-weight="700">category remove</text>
+    <rect x="200" y="316" width="560" height="20" rx="6" fill="#fdba74"/>
+    <text x="210" y="331" font-size="12" fill="#7c2d12">사용 중인지 확인하려고 전체 읽기</text>
+    <text x="790" y="331" fill="#c2410c">중간</text>
+  </g>
+
+  <!-- improvements -->
+  <text x="500" y="384" text-anchor="middle" font-size="17" font-weight="700" fill="#0f172a">개선 방법 — 간단한 것부터 단계적으로</text>
+
+  <rect x="30" y="402" width="225" height="200" rx="14" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="142" y="432" text-anchor="middle" font-size="15" font-weight="700" fill="#15803d">1. 번호표 따로 두기</text>
+  <text x="48" y="462" font-size="13" fill="#334155">마지막 id를 작은 파일</text>
+  <text x="48" y="484" font-size="13" fill="#334155">(meta)에 저장</text>
+  <text x="48" y="514" font-size="13" fill="#15803d">→ add 가 전체를 안 읽음</text>
+  <text x="48" y="584" font-size="12" fill="#64748b">효과: add</text>
+
+  <rect x="268" y="402" width="225" height="200" rx="14" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="380" y="432" text-anchor="middle" font-size="15" font-weight="700" fill="#15803d">2. 월별로 파일 나누기</text>
+  <text x="286" y="462" font-size="13" fill="#334155">transactions/2024-01.jsonl</text>
+  <text x="286" y="484" font-size="13" fill="#334155">처럼 달마다 1파일</text>
+  <text x="286" y="514" font-size="13" fill="#15803d">→ summary·export 는</text>
+  <text x="298" y="536" font-size="13" fill="#15803d">그 달 파일만 읽음</text>
+  <text x="286" y="584" font-size="12" fill="#64748b">효과: summary, update/delete</text>
+
+  <rect x="506" y="402" width="225" height="200" rx="14" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="618" y="432" text-anchor="middle" font-size="15" font-weight="700" fill="#15803d">3. 요약 미리 계산</text>
+  <text x="524" y="462" font-size="13" fill="#334155">월별 합계 · 카테고리별</text>
+  <text x="524" y="484" font-size="13" fill="#334155">사용 건수를 따로 저장</text>
+  <text x="524" y="514" font-size="13" fill="#15803d">→ 저장할 때 갱신,</text>
+  <text x="536" y="536" font-size="13" fill="#15803d">조회는 즉시</text>
+  <text x="524" y="584" font-size="12" fill="#64748b">효과: summary, category remove</text>
+
+  <rect x="744" y="402" width="226" height="200" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="857" y="432" text-anchor="middle" font-size="15" font-weight="700" fill="#1d4ed8">4. SQLite 로 교체</text>
+  <text x="762" y="462" font-size="13" fill="#334155">표준 라이브러리 sqlite3</text>
+  <text x="762" y="484" font-size="13" fill="#334155">인덱스 · 트랜잭션 · 정렬</text>
+  <text x="762" y="514" font-size="13" fill="#1d4ed8">→ 1건 수정 = 1건만 씀</text>
+  <text x="762" y="536" font-size="13" fill="#1d4ed8">→ 최신순 = ORDER BY</text>
+  <text x="762" y="584" font-size="12" fill="#64748b">storage.py 만 바꾸면 된다</text>
+</svg>

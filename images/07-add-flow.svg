@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+    <marker id="arro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="600" rx="18" fill="#ffffff"/>
+  <text x="500" y="42" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">add 명령의 흐름 — 질문 · 검사 · 저장</text>
+  <text x="500" y="68" text-anchor="middle" font-size="14" fill="#475569">틀린 값은 저장하지 않는다. 그 칸만 [오류]+[힌트]를 보여주고 다시 묻는다.</text>
+
+  <!-- input row -->
+  <g font-size="13">
+    <rect x="30" y="96" width="148" height="76" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+    <text x="104" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#1d4ed8">① 날짜</text>
+    <text x="104" y="150" text-anchor="middle" fill="#334155">2024-01-15</text>
+    <rect x="192" y="96" width="148" height="76" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+    <text x="266" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#1d4ed8">② 타입</text>
+    <text x="266" y="150" text-anchor="middle" fill="#334155">expense</text>
+    <rect x="354" y="96" width="148" height="76" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+    <text x="428" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#1d4ed8">③ 카테고리</text>
+    <text x="428" y="150" text-anchor="middle" fill="#334155">food</text>
+    <rect x="516" y="96" width="148" height="76" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+    <text x="590" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#1d4ed8">④ 금액</text>
+    <text x="590" y="150" text-anchor="middle" fill="#334155">15000</text>
+    <rect x="678" y="96" width="140" height="76" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="748" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">⑤ 메모</text>
+    <text x="748" y="150" text-anchor="middle" fill="#64748b">선택 (빈칸 OK)</text>
+    <rect x="832" y="96" width="138" height="76" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="901" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">⑥ 태그</text>
+    <text x="901" y="150" text-anchor="middle" fill="#64748b">meal,lunch</text>
+  </g>
+
+  <!-- check row -->
+  <g font-size="12.5" fill="#334155">
+    <rect x="30" y="196" width="148" height="92" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="104" y="220" text-anchor="middle" font-weight="700" fill="#0f172a">검사</text>
+    <text x="104" y="244" text-anchor="middle">YYYY-MM-DD 모양</text>
+    <text x="104" y="266" text-anchor="middle">+ 실제 있는 날짜</text>
+    <rect x="192" y="196" width="148" height="92" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="266" y="220" text-anchor="middle" font-weight="700" fill="#0f172a">검사</text>
+    <text x="266" y="244" text-anchor="middle">income 또는</text>
+    <text x="266" y="266" text-anchor="middle">expense 만</text>
+    <rect x="354" y="196" width="148" height="92" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="428" y="220" text-anchor="middle" font-weight="700" fill="#0f172a">검사</text>
+    <text x="428" y="244" text-anchor="middle">categories 파일에</text>
+    <text x="428" y="266" text-anchor="middle">등록된 이름인가</text>
+    <rect x="516" y="196" width="148" height="92" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="590" y="220" text-anchor="middle" font-weight="700" fill="#0f172a">검사</text>
+    <text x="590" y="244" text-anchor="middle">정수로 바뀌나</text>
+    <text x="590" y="266" text-anchor="middle">+ 0보다 큰가</text>
+    <rect x="678" y="196" width="292" height="92" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="824" y="220" text-anchor="middle" font-weight="700" fill="#0f172a">정리</text>
+    <text x="824" y="244" text-anchor="middle">태그는 쉼표로 나눠 목록으로</text>
+    <text x="824" y="266" text-anchor="middle">"meal,lunch" → ["meal", "lunch"]</text>
+  </g>
+  <g stroke="#94a3b8" stroke-width="2">
+    <line x1="104" y1="174" x2="104" y2="194"/><line x1="266" y1="174" x2="266" y2="194"/>
+    <line x1="428" y1="174" x2="428" y2="194"/><line x1="590" y1="174" x2="590" y2="194"/>
+    <line x1="748" y1="174" x2="748" y2="194"/><line x1="901" y1="174" x2="901" y2="194"/>
+  </g>
+
+  <!-- fail loop -->
+  <rect x="30" y="314" width="634" height="104" rx="12" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+  <text x="52" y="342" font-size="15" font-weight="700" fill="#c2410c">검사 실패하면 → 그 칸만 다시 묻기 (저장 안 함)</text>
+  <text x="52" y="372" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">날짜(YYYY-MM-DD): 2024-13-40</text>
+  <text x="52" y="396" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#c2410c">[오류] 날짜 형식이 올바르지 않습니다  [힌트] 예: 2024-01-15</text>
+  <path d="M 30 366 H 15 V 134 H 27" fill="none" stroke="#ea580c" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arro)"/>
+  <rect x="690" y="314" width="280" height="104" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="710" y="342" font-size="14" font-weight="700" fill="#0f172a">없는 카테고리를 넣으면?</text>
+  <text x="710" y="368" font-size="13" fill="#334155">등록된 목록을 보여주고 다시 묻는다</text>
+  <text x="710" y="392" font-size="13" fill="#334155">(category add 로 먼저 등록 안내)</text>
+
+  <!-- save row -->
+  <path d="M 677 292 V 432 H 180 V 444" fill="none" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arr)"/>
+  <text x="688" y="440" font-size="12.5" font-weight="700" fill="#15803d">모두 통과 → ⑦</text>
+  <rect x="30" y="448" width="300" height="124" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="180" y="478" text-anchor="middle" font-size="15" font-weight="700" fill="#15803d">⑦ id 만들기</text>
+  <text x="180" y="506" text-anchor="middle" font-size="13" fill="#334155">파일의 가장 큰 번호 + 1</text>
+  <text x="180" y="530" text-anchor="middle" font-size="13" fill="#334155">TX-000011 → TX-000012</text>
+  <text x="180" y="554" text-anchor="middle" font-size="12" fill="#64748b">(한 줄씩 읽으며 최댓값만 기억)</text>
+  <line x1="334" y1="510" x2="362" y2="510" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
+  <rect x="366" y="448" width="300" height="124" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="516" y="478" text-anchor="middle" font-size="15" font-weight="700" fill="#15803d">⑧ 파일 끝에 1줄 추가</text>
+  <text x="516" y="506" text-anchor="middle" font-size="13" fill="#334155">open(..., "a") 로 append</text>
+  <text x="516" y="530" text-anchor="middle" font-size="13" fill="#334155">기존 줄은 건드리지 않음</text>
+  <text x="516" y="554" text-anchor="middle" font-size="12" fill="#64748b">(추가는 전체 재작성 불필요)</text>
+  <line x1="670" y1="510" x2="698" y2="510" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
+  <rect x="702" y="448" width="268" height="124" rx="12" fill="#0f172a"/>
+  <text x="836" y="478" text-anchor="middle" font-size="15" font-weight="700" fill="#86efac">⑨ 결과 출력</text>
+  <text x="836" y="514" text-anchor="middle" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="14" fill="#e2e8f0">[저장 완료] id=TX-000012</text>
+  <text x="836" y="548" text-anchor="middle" font-size="12.5" fill="#94a3b8">종료 코드 0</text>
+</svg>

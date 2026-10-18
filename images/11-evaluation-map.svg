@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif">
+  <rect width="1000" height="560" rx="18" fill="#ffffff"/>
+  <text x="500" y="42" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">B2-1 평가표 지도 — 4개 항목이 묻는 것</text>
+  <text x="500" y="68" text-anchor="middle" font-size="14" fill="#475569">항목 1은 "보여주기", 항목 2~4는 "내 말로 설명하기"</text>
+
+  <!-- 1 -->
+  <rect x="30" y="90" width="460" height="215" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+  <circle cx="62" cy="124" r="18" fill="#2563eb"/><text x="62" y="130" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">1</text>
+  <text x="92" y="131" font-size="19" font-weight="700" fill="#1e3a8a">동작하나? (기능 · 저장 · 오류)</text>
+  <g font-size="13.5" fill="#334155">
+    <text x="52" y="166">• 8개 거래 명령이 요구사항대로 동작</text>
+    <text x="52" y="190">• 재실행 후에도 데이터 유지 (파일 3개)</text>
+    <text x="52" y="214">• category add/list/remove + 사용 중 처리</text>
+    <text x="52" y="238">• budget set → summary 에 사용률·초과 경고</text>
+    <text x="52" y="262">• import/export CSV 스키마 준수</text>
+    <text x="52" y="286">• 오류 시 [오류]+[힌트], 종료 코드 ≠ 0</text>
+  </g>
+
+  <!-- 2 -->
+  <rect x="510" y="90" width="460" height="215" rx="14" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <circle cx="542" cy="124" r="18" fill="#16a34a"/><text x="542" y="130" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">2</text>
+  <text x="572" y="131" font-size="19" font-weight="700" fill="#14532d">어떻게 나눴나? (구조 설계)</text>
+  <g font-size="13.5" fill="#334155">
+    <text x="532" y="170">• 모듈 3개+ 를 어떤 기준으로 나눴나</text>
+    <text x="544" y="192" fill="#15803d">→ "바뀌는 이유"가 같은 코드끼리</text>
+    <text x="532" y="222">• 클래스 2개+ 의 책임 경계</text>
+    <text x="544" y="244" fill="#15803d">→ 파일 1개당 저장 클래스 1개, 규칙은 서비스</text>
+    <text x="532" y="274">• update/delete 를 안전하게</text>
+    <text x="544" y="296" fill="#15803d">→ 임시 파일에 쓰고 os.replace 로 교체</text>
+  </g>
+
+  <!-- 3 -->
+  <rect x="30" y="322" width="460" height="215" rx="14" fill="#faf5ff" stroke="#d8b4fe" stroke-width="2"/>
+  <circle cx="62" cy="356" r="18" fill="#9333ea"/><text x="62" y="362" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">3</text>
+  <text x="92" y="363" font-size="19" font-weight="700" fill="#581c87">어떻게 · 왜? (파이썬 도구)</text>
+  <g font-size="13.5" fill="#334155">
+    <text x="52" y="402">• 제너레이터: yield 로 한 줄씩</text>
+    <text x="64" y="424" fill="#7e22ce">→ 파일이 커져도 메모리 일정</text>
+    <text x="52" y="454">• 데코레이터: @handle_errors</text>
+    <text x="64" y="476" fill="#7e22ce">→ 오류 출력·종료 코드를 한 곳에서</text>
+    <text x="52" y="506">• 타입 힌트: 입력·출력 계약</text>
+    <text x="64" y="528" fill="#7e22ce">→ mypy 로 str/int 실수를 실행 전에</text>
+  </g>
+
+  <!-- 4 -->
+  <rect x="510" y="322" width="460" height="215" rx="14" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+  <circle cx="542" cy="356" r="18" fill="#ea580c"/><text x="542" y="362" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">4</text>
+  <text x="572" y="363" font-size="19" font-weight="700" fill="#7c2d12">만약에? (비교 · 확장 · 신뢰)</text>
+  <g font-size="13.5" fill="#334155">
+    <text x="532" y="402">• JSONL vs CSV — 왜 JSONL?</text>
+    <text x="544" y="424" fill="#c2410c">→ 목록·숫자 타입 그대로, 줄 = 레코드</text>
+    <text x="532" y="454">• 10만 건이면 병목은?</text>
+    <text x="544" y="476" fill="#c2410c">→ 매번 전체 읽기 · 전체 재작성 → 분할/SQLite</text>
+    <text x="532" y="506">• CSV에 깨진 행이 섞이면?</text>
+    <text x="544" y="528" fill="#c2410c">→ 부분 성공 + 행 번호 리포트</text>
+  </g>
+</svg>

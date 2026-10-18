@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="620" rx="18" fill="#ffffff"/>
+  <text x="500" y="42" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">summary --month 2024-01 --top 3 — 한 번 훑으면서 더하기</text>
+  <text x="500" y="68" text-anchor="middle" font-size="14" fill="#475569">거래를 전부 모아두지 않는다. 한 건씩 보면서 "통장 3개"에 금액만 더한다.</text>
+
+  <!-- stream -->
+  <rect x="30" y="90" width="300" height="300" rx="14" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+  <text x="180" y="118" text-anchor="middle" font-size="16" font-weight="700" fill="#92400e">거래 스트림 (한 건씩)</text>
+  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#0f172a">
+    <rect x="48" y="134" width="264" height="30" rx="6" fill="#fff"/><text x="58" y="154">01-03 expense rent    150000</text>
+    <rect x="48" y="170" width="264" height="30" rx="6" fill="#fff"/><text x="58" y="190">01-12 expense transport 20000</text>
+    <rect x="48" y="206" width="264" height="30" rx="6" fill="#fff"/><text x="58" y="226">01-14 income  salary 3000000</text>
+    <rect x="48" y="242" width="264" height="30" rx="6" fill="#fff"/><text x="58" y="262">01-15 expense food     15000</text>
+    <rect x="48" y="278" width="264" height="30" rx="6" fill="#fff"/><text x="58" y="298">01-20 expense food     30000</text>
+    <rect x="48" y="314" width="264" height="30" rx="6" fill="#f1f5f9"/><text x="58" y="334" fill="#94a3b8">02-01 expense food      9000</text>
+  </g>
+  <text x="180" y="372" text-anchor="middle" font-size="12.5" fill="#64748b">회색 = 2024-01 이 아니라서 건너뜀</text>
+
+  <line x1="334" y1="240" x2="372" y2="240" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
+
+  <!-- accumulators -->
+  <rect x="376" y="90" width="290" height="300" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="521" y="118" text-anchor="middle" font-size="16" font-weight="700" fill="#1d4ed8">통장 3개 (누적 변수)</text>
+  <rect x="394" y="134" width="254" height="62" rx="10" fill="#fff"/>
+  <text x="410" y="158" font-size="13.5" font-weight="700" fill="#15803d">income 합계</text>
+  <text x="632" y="184" text-anchor="end" font-size="15" font-weight="700" fill="#0f172a">3,000,000</text>
+  <rect x="394" y="206" width="254" height="62" rx="10" fill="#fff"/>
+  <text x="410" y="230" font-size="13.5" font-weight="700" fill="#be123c">expense 합계</text>
+  <text x="632" y="256" text-anchor="end" font-size="15" font-weight="700" fill="#0f172a">215,000</text>
+  <rect x="394" y="278" width="254" height="96" rx="10" fill="#fff"/>
+  <text x="410" y="302" font-size="13.5" font-weight="700" fill="#7e22ce">카테고리별 지출 (Counter)</text>
+  <text x="410" y="326" font-size="13" fill="#334155">rent 150,000</text>
+  <text x="410" y="346" font-size="13" fill="#334155">food 45,000</text>
+  <text x="410" y="366" font-size="13" fill="#334155">transport 20,000</text>
+
+  <line x1="670" y1="240" x2="708" y2="240" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
+
+  <!-- output -->
+  <rect x="712" y="90" width="258" height="300" rx="14" fill="#0f172a"/>
+  <text x="841" y="118" text-anchor="middle" font-size="16" font-weight="700" fill="#86efac">출력</text>
+  <g font-size="13.5" fill="#e2e8f0">
+    <text x="732" y="150">총 수입: 3000000원</text>
+    <text x="732" y="174">총 지출: 215000원</text>
+    <text x="732" y="198">잔액: 2785000원</text>
+    <text x="732" y="222" fill="#fcd34d">예산: 500000원 (사용률 43.0%)</text>
+    <text x="732" y="262" font-weight="700">지출 TOP 3</text>
+    <text x="732" y="286">1) rent 150000원</text>
+    <text x="732" y="310">2) food 45000원</text>
+    <text x="732" y="334">3) transport 20000원</text>
+  </g>
+  <text x="841" y="372" text-anchor="middle" font-size="12" fill="#94a3b8">거래가 0건인 달 → "데이터 없음"</text>
+
+  <!-- budget gauge -->
+  <rect x="30" y="410" width="940" height="190" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="52" y="440" font-size="17" font-weight="700" fill="#0f172a">예산 사용률 = 총 지출 ÷ 예산 × 100   (budgets.jsonl 에 그 달 예산이 있을 때만)</text>
+
+  <text x="52" y="478" font-size="14" font-weight="700" fill="#15803d">예산 이내</text>
+  <rect x="160" y="462" width="560" height="24" rx="12" fill="#e2e8f0"/>
+  <rect x="160" y="462" width="241" height="24" rx="12" fill="#22c55e"/>
+  <text x="740" y="480" font-size="14" fill="#334155">215,000 / 500,000 = 43.0%</text>
+
+  <text x="52" y="528" font-size="14" font-weight="700" fill="#be123c">예산 초과</text>
+  <rect x="160" y="512" width="560" height="24" rx="12" fill="#e2e8f0"/>
+  <rect x="160" y="512" width="560" height="24" rx="12" fill="#ef4444"/>
+  <text x="740" y="530" font-size="14" fill="#334155">620,000 / 500,000 = 124.0%</text>
+  <text x="160" y="572" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13.5" fill="#be123c">[경고] 예산을 120000원 초과했습니다!</text>
+  <text x="740" y="572" font-size="12.5" fill="#64748b">예산 없음 → 예산 줄 생략</text>
+</svg>

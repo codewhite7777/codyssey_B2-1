@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="640" rx="18" fill="#ffffff"/>
+  <text x="500" y="42" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">데코레이터 — 모든 명령을 같은 "포장지"로 감싸기</text>
+  <text x="500" y="68" text-anchor="middle" font-size="14" fill="#475569">기능(무엇을 하나)과 공통 관심사(오류가 나면 어떻게 하나)를 떼어 놓는다</text>
+
+  <!-- left: without -->
+  <rect x="30" y="88" width="455" height="270" rx="14" fill="#fff1f2" stroke="#fda4af" stroke-width="2"/>
+  <text x="52" y="118" font-size="17" font-weight="700" fill="#be123c">데코레이터 없이: 명령마다 복붙</text>
+  <g xml:space="preserve" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5">
+    <rect x="52" y="134" width="196" height="96" rx="8" fill="#fff"/>
+    <text x="62" y="155" fill="#0f172a">def cmd_add():</text>
+    <text x="62" y="174" fill="#be123c">  try: ...</text>
+    <text x="62" y="193" fill="#be123c">  except ...: print</text>
+    <text x="62" y="212" fill="#be123c">    return 1</text>
+    <rect x="266" y="134" width="196" height="96" rx="8" fill="#fff"/>
+    <text x="276" y="155" fill="#0f172a">def cmd_delete():</text>
+    <text x="276" y="174" fill="#be123c">  try: ...</text>
+    <text x="276" y="193" fill="#be123c">  except ...: print</text>
+    <text x="276" y="212" fill="#be123c">    return 1</text>
+  </g>
+  <text x="257" y="255" text-anchor="middle" font-size="13" fill="#be123c">… 10개 명령에 같은 코드 10번</text>
+  <text x="52" y="290" font-size="14" fill="#334155">• 오류 문구 형식을 바꾸려면 10곳 수정</text>
+  <text x="52" y="315" font-size="14" fill="#334155">• 한 곳 빠뜨리면 그 명령만 스택트레이스 노출</text>
+  <text x="52" y="340" font-size="14" fill="#334155">• 진짜 기능 코드가 try/except 에 묻힘</text>
+
+  <!-- right: with -->
+  <rect x="515" y="88" width="455" height="270" rx="14" fill="#faf5ff" stroke="#d8b4fe" stroke-width="2"/>
+  <text x="537" y="118" font-size="17" font-weight="700" fill="#7e22ce">데코레이터로: 한 곳에서 처리</text>
+  <rect x="537" y="134" width="410" height="110" rx="12" fill="#f3e8ff" stroke="#a855f7" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="553" y="156" font-size="12.5" font-weight="700" fill="#7e22ce">@handle_errors  (포장지: try / except / 종료 코드)</text>
+  <g xml:space="preserve" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5">
+    <rect x="555" y="168" width="120" height="60" rx="8" fill="#fff"/>
+    <text x="565" y="192" fill="#0f172a">cmd_add()</text>
+    <text x="565" y="214" fill="#64748b">기능만</text>
+    <rect x="689" y="168" width="120" height="60" rx="8" fill="#fff"/>
+    <text x="699" y="192" fill="#0f172a">cmd_list()</text>
+    <text x="699" y="214" fill="#64748b">기능만</text>
+    <rect x="823" y="168" width="110" height="60" rx="8" fill="#fff"/>
+    <text x="833" y="192" fill="#0f172a">cmd_...()</text>
+    <text x="833" y="214" fill="#64748b">기능만</text>
+  </g>
+  <text x="537" y="275" font-size="14" fill="#334155">• 오류 출력 규칙이 딱 1곳 → 수정도 1곳</text>
+  <text x="537" y="300" font-size="14" fill="#334155">• 새 명령도 @handle_errors 한 줄이면 끝</text>
+  <text x="537" y="325" font-size="14" fill="#334155">• 명령 함수에는 "할 일"만 남아 읽기 쉬움</text>
+  <text x="537" y="347" font-size="12.5" fill="#64748b">(같은 방식으로 @timed 실행 시간 측정도 가능)</text>
+
+  <!-- bottom: flow -->
+  <rect x="30" y="378" width="940" height="242" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="52" y="408" font-size="17" font-weight="700" fill="#0f172a">@handle_errors 안에서 일어나는 일</text>
+
+  <rect x="52" y="428" width="190" height="72" rx="12" fill="#fff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="147" y="458" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1d4ed8">명령 함수 실행</text>
+  <text x="147" y="482" text-anchor="middle" font-size="12.5" fill="#475569">try: func(...)</text>
+
+  <line x1="246" y1="450" x2="318" y2="440" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
+  <line x1="246" y1="472" x2="318" y2="512" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
+  <line x1="200" y1="502" x2="318" y2="580" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
+
+  <rect x="322" y="418" width="628" height="48" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="340" y="448" font-size="14" font-weight="700" fill="#15803d">성공</text>
+  <text x="430" y="448" font-size="13.5" fill="#334155">결과 출력 → 종료 코드 0</text>
+
+  <rect x="322" y="478" width="628" height="68" rx="10" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+  <text x="340" y="506" font-size="14" font-weight="700" fill="#c2410c">예상한 오류</text>
+  <text x="430" y="506" font-size="13.5" fill="#334155">AppError (날짜 형식, 없는 id, 파일 없음 …)</text>
+  <text x="430" y="532" font-size="13.5" font-weight="700" fill="#0f172a">[오류] 원인  /  [힌트] 해결 방법  → 종료 코드 1</text>
+
+  <rect x="322" y="558" width="628" height="48" rx="10" fill="#fff1f2" stroke="#fda4af" stroke-width="2"/>
+  <text x="340" y="588" font-size="14" font-weight="700" fill="#be123c">예상 못한 오류</text>
+  <text x="458" y="588" font-size="13.5" fill="#334155">Exception → "[오류] 알 수 없는 오류" + 힌트 → 종료 코드 1 (스택트레이스 X)</text>
+</svg>

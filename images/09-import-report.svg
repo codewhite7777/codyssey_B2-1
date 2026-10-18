@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="640" rx="18" fill="#ffffff"/>
+  <text x="500" y="42" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">import — 깨진 행이 섞인 CSV를 받았을 때</text>
+  <text x="500" y="68" text-anchor="middle" font-size="14" fill="#475569">행마다 검사 → 통과한 행만 저장 → 버린 행은 "몇 번째 줄, 왜"를 알려준다</text>
+
+  <!-- csv -->
+  <rect x="30" y="90" width="430" height="262" rx="14" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+  <text x="50" y="118" font-size="15" font-weight="700" fill="#92400e">import.csv (UTF-8, 헤더 포함)</text>
+  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5">
+    <text x="50" y="148" fill="#64748b">1 date,type,category,amount,memo,tags</text>
+    <rect x="44" y="160" width="404" height="28" rx="6" fill="#dcfce7"/><text x="50" y="179" fill="#0f172a">2 2024-01-05,expense,food,8000,간식,</text>
+    <rect x="44" y="194" width="404" height="28" rx="6" fill="#fee2e2"/><text x="50" y="213" fill="#0f172a">3 2024-01-06,expense,food,0,무료?,</text>
+    <rect x="44" y="228" width="404" height="28" rx="6" fill="#dcfce7"/><text x="50" y="247" fill="#0f172a">4 2024-01-07,income,salary,50000,,</text>
+    <rect x="44" y="262" width="404" height="28" rx="6" fill="#fee2e2"/><text x="50" y="281" fill="#0f172a">5 2024-01-08,expense,golf,30000,,</text>
+    <rect x="44" y="296" width="404" height="28" rx="6" fill="#fee2e2"/><text x="50" y="315" fill="#0f172a">6 2024/01/09,expense,food,4000,,</text>
+  </g>
+  <text x="245" y="342" text-anchor="middle" font-size="12" fill="#92400e">헤더에 필수 컬럼이 없으면 → 한 줄도 읽지 않고 거부</text>
+
+  <line x1="464" y1="220" x2="500" y2="220" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
+
+  <!-- result -->
+  <rect x="504" y="90" width="466" height="262" rx="14" fill="#0f172a"/>
+  <text x="524" y="118" font-size="15" font-weight="700" fill="#86efac">출력 (리포트)</text>
+  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13">
+    <text x="524" y="152" fill="#e2e8f0">[완료] imported=2, skipped=3</text>
+    <text x="524" y="184" fill="#fca5a5">  3행: amount는 양수여야 합니다 (0)</text>
+    <text x="524" y="208" fill="#fca5a5">  5행: 등록되지 않은 카테고리 (golf)</text>
+    <text x="524" y="232" fill="#fca5a5">  6행: 날짜 형식 오류 (2024/01/09)</text>
+    <text x="524" y="268" fill="#fcd34d">[힌트] 위 행만 고쳐서 다시 import 하세요.</text>
+  </g>
+  <text x="524" y="306" font-size="12.5" fill="#94a3b8">• 통과한 2건은 검사가 다 끝난 뒤 한꺼번에 추가</text>
+  <text x="524" y="328" font-size="12.5" fill="#94a3b8">• skipped 가 1건 이상이면 종료 코드 1 (부분 성공 신호)</text>
+
+  <!-- strategies -->
+  <text x="500" y="390" text-anchor="middle" font-size="17" font-weight="700" fill="#0f172a">선택지 3가지 — 이 저장소의 선택: ① 부분 성공 + ③ 리포트</text>
+
+  <rect x="30" y="406" width="300" height="214" rx="14" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+  <text x="180" y="436" text-anchor="middle" font-size="16" font-weight="700" fill="#15803d">① 부분 성공 (선택)</text>
+  <text x="50" y="466" font-size="13.5" fill="#334155">좋은 행은 저장, 나쁜 행만 건너뜀</text>
+  <text x="50" y="494" font-size="13" fill="#15803d">+ 1,000줄 중 1줄 실수로</text>
+  <text x="62" y="514" font-size="13" fill="#15803d">999줄을 날리지 않는다</text>
+  <text x="50" y="542" font-size="13" fill="#be123c">− 다시 import 하면 중복 위험</text>
+  <text x="62" y="562" font-size="13" fill="#be123c">→ 그래서 "고칠 행만" 알려줌</text>
+  <text x="50" y="596" font-size="12" fill="#64748b">미션 예시 imported=5, skipped=0 과 같은 방식</text>
+
+  <rect x="350" y="406" width="300" height="214" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="500" y="436" text-anchor="middle" font-size="16" font-weight="700" fill="#334155">② 전체 롤백</text>
+  <text x="370" y="466" font-size="13.5" fill="#334155">1줄이라도 틀리면 0건 저장</text>
+  <text x="370" y="494" font-size="13" fill="#15803d">+ "전부 아니면 전무" 라서</text>
+  <text x="382" y="514" font-size="13" fill="#15803d">재시도해도 중복이 없다</text>
+  <text x="370" y="542" font-size="13" fill="#be123c">− 큰 파일은 고치고 또 고쳐야</text>
+  <text x="382" y="562" font-size="13" fill="#be123c">한 건이라도 들어간다</text>
+  <text x="370" y="596" font-size="12" fill="#64748b">은행 이체처럼 정확성이 최우선일 때</text>
+
+  <rect x="670" y="406" width="300" height="214" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="820" y="436" text-anchor="middle" font-size="16" font-weight="700" fill="#1d4ed8">③ 리포트 (항상)</text>
+  <text x="690" y="466" font-size="13.5" fill="#334155">①이든 ②든 결과를 숫자로 보고</text>
+  <text x="690" y="494" font-size="13" fill="#15803d">+ 몇 건 들어갔는지 사용자가</text>
+  <text x="702" y="514" font-size="13" fill="#15803d">추측할 필요가 없다</text>
+  <text x="690" y="542" font-size="13" fill="#334155">행 번호 + 원인 + 힌트</text>
+  <text x="702" y="562" font-size="13" fill="#334155">= 바로 고칠 수 있다</text>
+  <text x="690" y="596" font-size="12" fill="#64748b">조용히 버리는 것 = 신뢰를 잃는 길</text>
+</svg>
