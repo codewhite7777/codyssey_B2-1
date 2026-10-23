@@ -5,34 +5,34 @@
     </marker>
   </defs>
   <rect width="1000" height="560" rx="18" fill="#ffffff"/>
-  <text x="500" y="42" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">진행 순서 Step 0 → 8 — 아래(데이터)부터 위(화면)로 쌓기</text>
+  <text x="500" y="42" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">직접 만든다면: 구현 순서 — 아래(데이터)부터 위(화면)로</text>
   <text x="500" y="68" text-anchor="middle" font-size="14" fill="#475569">먼저 결정을 고정하고, 모델 → 저장소 → 서비스 → CLI 순서로 만들면 매 단계를 바로 시험할 수 있다</text>
 
   <g font-size="13">
     <!-- row 1 -->
     <rect x="30" y="92" width="220" height="130" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
-    <text x="50" y="122" font-size="15" font-weight="700" fill="#334155">Step 0  결정 고정</text>
+    <text x="50" y="122" font-size="15" font-weight="700" fill="#334155">0단계  결정 고정</text>
     <text x="50" y="150" fill="#334155">JSONL · 기본 카테고리 자동</text>
     <text x="50" y="172" fill="#334155">update = 옵션 방식</text>
     <text x="50" y="194" fill="#334155">사용 중 카테고리 = 삭제 막기</text>
     <line x1="254" y1="157" x2="276" y2="157" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
 
     <rect x="280" y="92" width="210" height="130" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
-    <text x="300" y="122" font-size="15" font-weight="700" fill="#0f172a">Step 1  모델</text>
+    <text x="300" y="122" font-size="15" font-weight="700" fill="#0f172a">1단계  모델</text>
     <text x="300" y="150" fill="#334155">models.py</text>
     <text x="300" y="172" fill="#334155">@dataclass Transaction</text>
     <text x="300" y="194" fill="#334155">dict ↔ 객체 변환</text>
     <line x1="494" y1="157" x2="516" y2="157" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
 
     <rect x="520" y="92" width="210" height="130" rx="14" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
-    <text x="540" y="122" font-size="15" font-weight="700" fill="#92400e">Step 2  거래 저장소</text>
+    <text x="540" y="122" font-size="15" font-weight="700" fill="#92400e">2단계  거래 저장소</text>
     <text x="540" y="150" fill="#334155">iter (yield) · append</text>
     <text x="540" y="172" fill="#334155">rewrite (임시 파일 교체)</text>
     <text x="540" y="194" fill="#334155">파일 없으면 자동 생성</text>
     <line x1="734" y1="157" x2="756" y2="157" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
 
     <rect x="760" y="92" width="210" height="130" rx="14" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
-    <text x="780" y="122" font-size="15" font-weight="700" fill="#92400e">Step 3  카테고리·예산</text>
+    <text x="780" y="122" font-size="15" font-weight="700" fill="#92400e">3단계  카테고리·예산</text>
     <text x="780" y="150" fill="#334155">CategoryStore</text>
     <text x="780" y="172" fill="#334155">BudgetStore</text>
     <text x="780" y="194" fill="#334155">→ 저장 파일 3개 완성</text>
@@ -41,28 +41,28 @@
 
     <!-- row 2 -->
     <rect x="30" y="274" width="220" height="130" rx="14" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
-    <text x="50" y="304" font-size="15" font-weight="700" fill="#166534">Step 4  서비스</text>
+    <text x="50" y="304" font-size="15" font-weight="700" fill="#166534">4단계  서비스</text>
     <text x="50" y="332" fill="#334155">입력 검증 (날짜·금액·타입)</text>
     <text x="50" y="354" fill="#334155">list/search/summary 계산</text>
     <text x="50" y="376" fill="#334155">예산 사용률 · 카테고리 규칙</text>
     <line x1="254" y1="339" x2="276" y2="339" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
 
     <rect x="280" y="274" width="210" height="130" rx="14" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
-    <text x="300" y="304" font-size="15" font-weight="700" fill="#166534">Step 5  import/export</text>
+    <text x="300" y="304" font-size="15" font-weight="700" fill="#166534">5단계  import/export</text>
     <text x="300" y="332" fill="#334155">csv 모듈 · UTF-8 · 헤더</text>
     <text x="300" y="354" fill="#334155">행 검사 + 리포트</text>
     <text x="300" y="376" fill="#334155">export 기간 조건 필수</text>
     <line x1="494" y1="339" x2="516" y2="339" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
 
     <rect x="520" y="274" width="210" height="130" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
-    <text x="540" y="304" font-size="15" font-weight="700" fill="#1d4ed8">Step 6  CLI</text>
+    <text x="540" y="304" font-size="15" font-weight="700" fill="#1d4ed8">6단계  CLI</text>
     <text x="540" y="332" fill="#334155">argparse 서브커맨드</text>
     <text x="540" y="354" fill="#334155">--help · --data-dir</text>
     <text x="540" y="376" fill="#334155">add 대화형 input()</text>
     <line x1="734" y1="339" x2="756" y2="339" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
 
     <rect x="760" y="274" width="210" height="130" rx="14" fill="#faf5ff" stroke="#d8b4fe" stroke-width="2"/>
-    <text x="780" y="304" font-size="15" font-weight="700" fill="#7e22ce">Step 7  데코레이터</text>
+    <text x="780" y="304" font-size="15" font-weight="700" fill="#7e22ce">7단계  데코레이터</text>
     <text x="780" y="332" fill="#334155">@handle_errors</text>
     <text x="780" y="354" fill="#334155">[오류]+[힌트] 출력</text>
     <text x="780" y="376" fill="#334155">종료 코드 0 / 1 / 2</text>
@@ -71,7 +71,7 @@
 
     <!-- final -->
     <rect x="200" y="454" width="600" height="86" rx="14" fill="#0f172a"/>
-    <text x="500" y="486" text-anchor="middle" font-size="16" font-weight="700" fill="#86efac">Step 8  README 작성 + 처음부터 끝까지 시나리오 점검</text>
+    <text x="500" y="486" text-anchor="middle" font-size="16" font-weight="700" fill="#86efac">8단계  README 작성 + 처음부터 끝까지 시나리오 점검</text>
     <text x="500" y="514" text-anchor="middle" font-size="13" fill="#cbd5e1">실행 방법 · 저장 위치/형식 · 명령 예시 · CSV 스키마  /  재실행 유지 · 오류 종료 코드 확인 (echo $?)</text>
   </g>
 </svg>

@@ -13,11 +13,11 @@
   <text x="50" y="118" font-size="15" font-weight="700" fill="#92400e">import.csv (UTF-8, 헤더 포함)</text>
   <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5">
     <text x="50" y="148" fill="#64748b">1 date,type,category,amount,memo,tags</text>
-    <rect x="44" y="160" width="404" height="28" rx="6" fill="#dcfce7"/><text x="50" y="179" fill="#0f172a">2 2024-01-05,expense,food,8000,간식,</text>
-    <rect x="44" y="194" width="404" height="28" rx="6" fill="#fee2e2"/><text x="50" y="213" fill="#0f172a">3 2024-01-06,expense,food,0,무료?,</text>
-    <rect x="44" y="228" width="404" height="28" rx="6" fill="#dcfce7"/><text x="50" y="247" fill="#0f172a">4 2024-01-07,income,salary,50000,,</text>
-    <rect x="44" y="262" width="404" height="28" rx="6" fill="#fee2e2"/><text x="50" y="281" fill="#0f172a">5 2024-01-08,expense,golf,30000,,</text>
-    <rect x="44" y="296" width="404" height="28" rx="6" fill="#fee2e2"/><text x="50" y="315" fill="#0f172a">6 2024/01/09,expense,food,4000,,</text>
+    <rect x="44" y="160" width="404" height="28" rx="6" fill="#dcfce7"/><text x="50" y="179" fill="#0f172a">2 2024-02-20,expense,food,8000,간식,</text>
+    <rect x="44" y="194" width="404" height="28" rx="6" fill="#fee2e2"/><text x="50" y="213" fill="#0f172a">3 2024-02-21,expense,food,0,무료?,</text>
+    <rect x="44" y="228" width="404" height="28" rx="6" fill="#dcfce7"/><text x="50" y="247" fill="#0f172a">4 2024-02-22,income,salary,50000,보너스,</text>
+    <rect x="44" y="262" width="404" height="28" rx="6" fill="#fee2e2"/><text x="50" y="281" fill="#0f172a">5 2024-02-23,expense,golf,30000,,</text>
+    <rect x="44" y="296" width="404" height="28" rx="6" fill="#fee2e2"/><text x="50" y="315" fill="#0f172a">6 2024/02/24,expense,food,4000,,</text>
   </g>
   <text x="245" y="342" text-anchor="middle" font-size="12" fill="#92400e">헤더에 필수 컬럼이 없으면 → 한 줄도 읽지 않고 거부</text>
 
@@ -26,12 +26,13 @@
   <!-- result -->
   <rect x="504" y="90" width="466" height="262" rx="14" fill="#0f172a"/>
   <text x="524" y="118" font-size="15" font-weight="700" fill="#86efac">출력 (리포트)</text>
-  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13">
+  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5">
     <text x="524" y="152" fill="#e2e8f0">[완료] imported=2, skipped=3</text>
-    <text x="524" y="184" fill="#fca5a5">  3행: amount는 양수여야 합니다 (0)</text>
-    <text x="524" y="208" fill="#fca5a5">  5행: 등록되지 않은 카테고리 (golf)</text>
-    <text x="524" y="232" fill="#fca5a5">  6행: 날짜 형식 오류 (2024/01/09)</text>
-    <text x="524" y="268" fill="#fcd34d">[힌트] 위 행만 고쳐서 다시 import 하세요.</text>
+    <text x="540" y="184" fill="#fca5a5">3행: 금액은 0보다 커야 합니다 (0).</text>
+    <text x="540" y="208" fill="#fca5a5">5행: 등록되지 않은 카테고리입니다 (golf).</text>
+    <text x="540" y="232" fill="#fca5a5">6행: 날짜 형식이 올바르지 않습니다 (2024/02/24).</text>
+    <text x="524" y="260" fill="#fca5a5">[오류] 3개 행을 건너뛰었습니다.</text>
+    <text x="524" y="284" fill="#fcd34d">[힌트] 위 행만 고쳐서 새 CSV로 다시 import 하세요.</text>
   </g>
   <text x="524" y="306" font-size="12.5" fill="#94a3b8">• 통과한 2건은 검사가 다 끝난 뒤 한꺼번에 추가</text>
   <text x="524" y="328" font-size="12.5" fill="#94a3b8">• skipped 가 1건 이상이면 종료 코드 1 (부분 성공 신호)</text>

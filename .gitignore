@@ -2,7 +2,8 @@ __pycache__/
 *.py[cod]
 .venv/
 .DS_Store
-# 실행하면 생기는 가계부 데이터와 내보낸 CSV
+# 실행하면 생기는 가계부 데이터와 내보낸 CSV (examples/ 는 제외)
 data/
-out.csv
-export.csv
+data_broken/
+practice/
+/*.csv

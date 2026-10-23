@@ -44,7 +44,7 @@
     <text x="378" y="253" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#86efac">add</text>
     <text x="378" y="273" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#94a3b8">→ 질문에 답: income, 3000000</text>
     <text x="370" y="314" font-size="13" font-weight="700" fill="#166534">결과</text>
-    <text x="370" y="337" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">[저장 완료] id=TX-000011</text>
+    <text x="370" y="337" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">[저장 완료] id=TX-000003</text>
   </g>
 
   <line x1="654" y1="228" x2="666" y2="228" stroke="#475569" stroke-width="3" marker-end="url(#arr)"/>
@@ -63,7 +63,7 @@
     <text x="698" y="253" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#86efac">add</text>
     <text x="698" y="273" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#94a3b8">→ expense, food, 15000, 점심</text>
     <text x="690" y="314" font-size="13" font-weight="700" fill="#9f1239">결과</text>
-    <text x="690" y="337" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">[저장 완료] id=TX-000012</text>
+    <text x="690" y="337" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">[저장 완료] id=TX-000004</text>
   </g>
 
   <!-- wrap arrow row1 -> row2 -->
@@ -85,7 +85,7 @@
     <text x="58" y="548" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#93c5fd">search --q 점심</text>
     <text x="58" y="568" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#94a3b8">(전체 최신순은 list)</text>
     <text x="50" y="609" font-size="13" font-weight="700" fill="#1e40af">결과</text>
-    <text x="50" y="632" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#0f172a">TX-000012 | 2024-01-15 | food | 15000</text>
+    <text x="50" y="632" font-size="13.5" fill="#0f172a">점심 기록 3건이 최신순으로 나온다</text>
   </g>
 
   <line x1="334" y1="523" x2="346" y2="523" stroke="#475569" stroke-width="3" marker-end="url(#arr)"/>
@@ -103,10 +103,10 @@
     <text x="370" y="481" font-size="19" font-weight="800" fill="#0f172a">"앗, 같은 걸</text>
     <text x="370" y="506" font-size="19" font-weight="800" fill="#0f172a">두 번 넣었네"</text>
     <rect x="366" y="525" width="268" height="54" rx="9" fill="#0f172a"/>
-    <text x="378" y="548" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#e2e8f0">delete --id TX-000013</text>
+    <text x="378" y="548" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#e2e8f0">delete --id TX-000006</text>
     <text x="378" y="568" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#94a3b8">(값만 고칠 땐 update)</text>
     <text x="370" y="609" font-size="13" font-weight="700" fill="#334155">결과</text>
-    <text x="370" y="632" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">[삭제 완료] id=TX-000013</text>
+    <text x="370" y="632" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">[삭제 완료] id=TX-000006</text>
   </g>
 
   <line x1="654" y1="523" x2="666" y2="523" stroke="#475569" stroke-width="3" marker-end="url(#arr)"/>

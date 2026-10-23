@@ -66,7 +66,7 @@
   <rect x="30" y="314" width="634" height="104" rx="12" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
   <text x="52" y="342" font-size="15" font-weight="700" fill="#c2410c">검사 실패하면 → 그 칸만 다시 묻기 (저장 안 함)</text>
   <text x="52" y="372" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">날짜(YYYY-MM-DD): 2024-13-40</text>
-  <text x="52" y="396" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#c2410c">[오류] 날짜 형식이 올바르지 않습니다  [힌트] 예: 2024-01-15</text>
+  <text x="52" y="396" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#c2410c">[오류] 날짜 형식이 올바르지 않습니다 (2024-13-40).</text>
   <path d="M 30 366 H 15 V 134 H 27" fill="none" stroke="#ea580c" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arro)"/>
   <rect x="690" y="314" width="280" height="104" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
   <text x="710" y="342" font-size="14" font-weight="700" fill="#0f172a">없는 카테고리를 넣으면?</text>
@@ -79,7 +79,7 @@
   <rect x="30" y="448" width="300" height="124" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
   <text x="180" y="478" text-anchor="middle" font-size="15" font-weight="700" fill="#15803d">⑦ id 만들기</text>
   <text x="180" y="506" text-anchor="middle" font-size="13" fill="#334155">파일의 가장 큰 번호 + 1</text>
-  <text x="180" y="530" text-anchor="middle" font-size="13" fill="#334155">TX-000011 → TX-000012</text>
+  <text x="180" y="530" text-anchor="middle" font-size="13" fill="#334155">TX-000003 → TX-000004</text>
   <text x="180" y="554" text-anchor="middle" font-size="12" fill="#64748b">(한 줄씩 읽으며 최댓값만 기억)</text>
   <line x1="334" y1="510" x2="362" y2="510" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
   <rect x="366" y="448" width="300" height="124" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
@@ -90,6 +90,6 @@
   <line x1="670" y1="510" x2="698" y2="510" stroke="#64748b" stroke-width="2.5" marker-end="url(#arr)"/>
   <rect x="702" y="448" width="268" height="124" rx="12" fill="#0f172a"/>
   <text x="836" y="478" text-anchor="middle" font-size="15" font-weight="700" fill="#86efac">⑨ 결과 출력</text>
-  <text x="836" y="514" text-anchor="middle" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="14" fill="#e2e8f0">[저장 완료] id=TX-000012</text>
+  <text x="836" y="514" text-anchor="middle" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="14" fill="#e2e8f0">[저장 완료] id=TX-000004</text>
   <text x="836" y="548" text-anchor="middle" font-size="12.5" fill="#94a3b8">종료 코드 0</text>
 </svg>

@@ -7,21 +7,21 @@
     <rect x="30" y="92" width="940" height="138" rx="12" fill="#0f172a"/>
     <text x="48" y="117" font-size="13.5" fill="#fcd34d">data/transactions.jsonl</text>
     <text x="950" y="117" text-anchor="end" fill="#94a3b8">새 거래는 맨 아래에 한 줄 추가(append)</text>
-    <text x="48" y="146" font-size="11.5" fill="#e2e8f0">{"id": "TX-000010", "type": "expense", "date": "2024-01-12", "amount": 20000, "category": "transport", "memo": "", "tags": []}</text>
-    <text x="48" y="171" font-size="11.5" fill="#e2e8f0">{"id": "TX-000011", "type": "income", "date": "2024-01-14", "amount": 3000000, "category": "salary", "memo": "", "tags": []}</text>
-    <text x="48" y="196" font-size="11.5" fill="#e2e8f0">{"id": "TX-000012", "type": "expense", "date": "2024-01-15", "amount": 15000, "category": "food", "memo": "점심", "tags": ["meal"]}</text>
+    <text x="48" y="146" font-size="11.5" fill="#e2e8f0">{"id": "TX-000001", "type": "expense", "date": "2024-01-03", "amount": 150000, "category": "rent", "memo": "1월 월세", "tags": []}</text>
+    <text x="48" y="171" font-size="11.5" fill="#e2e8f0">{"id": "TX-000002", "type": "expense", "date": "2024-01-12", "amount": 20000, "category": "transport", "memo": "교통카드 충전", "tags": ["commute"]}</text>
+    <text x="48" y="196" font-size="11.5" fill="#e2e8f0">{"id": "TX-000003", "type": "income", "date": "2024-01-14", "amount": 3000000, "category": "salary", "memo": "1월 월급", "tags": ["monthly"]}</text>
     <text x="48" y="218" fill="#64748b">...  (줄 하나 = 거래 한 건 → 한 줄씩 읽으면 한 건씩 처리 가능)</text>
 
     <rect x="30" y="244" width="460" height="104" rx="12" fill="#0f172a"/>
     <text x="48" y="269" font-size="13.5" fill="#fcd34d">data/categories.jsonl</text>
-    <text x="48" y="296" fill="#e2e8f0">{"name": "food"}</text>
-    <text x="48" y="318" fill="#e2e8f0">{"name": "transport"}</text>
+    <text x="48" y="296" fill="#e2e8f0">{"name": "etc"}</text>
+    <text x="48" y="318" fill="#e2e8f0">{"name": "food"}</text>
     <text x="48" y="340" fill="#64748b">...</text>
 
     <rect x="510" y="244" width="460" height="104" rx="12" fill="#0f172a"/>
     <text x="528" y="269" font-size="13.5" fill="#fcd34d">data/budgets.jsonl</text>
     <text x="528" y="296" fill="#e2e8f0">{"month": "2024-01", "amount": 500000}</text>
-    <text x="528" y="318" fill="#e2e8f0">{"month": "2024-02", "amount": 450000}</text>
+    <text x="528" y="318" fill="#e2e8f0">{"month": "2024-02", "amount": 150000}</text>
     <text x="528" y="340" fill="#64748b">...</text>
   </g>
 

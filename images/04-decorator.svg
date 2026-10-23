@@ -72,5 +72,5 @@
 
   <rect x="322" y="558" width="628" height="48" rx="10" fill="#fff1f2" stroke="#fda4af" stroke-width="2"/>
   <text x="340" y="588" font-size="14" font-weight="700" fill="#be123c">예상 못한 오류</text>
-  <text x="458" y="588" font-size="13.5" fill="#334155">Exception → "[오류] 알 수 없는 오류" + 힌트 → 종료 코드 1 (스택트레이스 X)</text>
+  <text x="458" y="588" font-size="13.5" fill="#334155">Exception → "[오류] 예상하지 못한 문제…" + 힌트 → 종료 코드 1</text>
 </svg>
