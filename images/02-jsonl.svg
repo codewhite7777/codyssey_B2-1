@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif">
+  <rect width="1000" height="620" rx="18" fill="#ffffff"/>
+  <text x="500" y="44" text-anchor="middle" font-size="25" font-weight="800" fill="#0f172a">JSONL = JSON Lines = "한 줄에 JSON 하나"</text>
+  <text x="500" y="72" text-anchor="middle" font-size="14.5" fill="#475569">같은 거래 3건을 JSON 파일과 JSONL 파일로 저장해 보면</text>
+
+  <!-- JSON -->
+  <rect x="30" y="92" width="455" height="330" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2.5"/>
+  <text x="52" y="124" font-size="18" font-weight="800" fill="#334155">JSON 파일 (보통 방식)</text>
+  <text x="52" y="146" font-size="13" fill="#64748b">파일 전체가 [ … ] 하나의 덩어리</text>
+  <rect x="52" y="160" width="410" height="122" rx="10" fill="#0f172a"/>
+  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13.5" fill="#e2e8f0">
+    <text x="66" y="184" fill="#f87171">[</text>
+    <text x="80" y="206">{"id": "TX-000001", ...},</text>
+    <text x="80" y="228">{"id": "TX-000002", ...},</text>
+    <text x="80" y="250">{"id": "TX-000003", ...}</text>
+    <text x="66" y="272" fill="#f87171">]</text>
+  </g>
+  <g font-size="14" fill="#334155">
+    <text x="52" y="312" font-weight="700" fill="#be123c">추가할 때</text>
+    <text x="140" y="312">] 앞에 끼워 넣어야 → 파일 전체 다시 쓰기</text>
+    <text x="52" y="342" font-weight="700" fill="#be123c">읽을 때</text>
+    <text x="140" y="342">괄호가 닫혀야 끝 → 전체를 한 번에 읽기</text>
+    <text x="52" y="372" font-weight="700" fill="#be123c">깨지면</text>
+    <text x="140" y="372">한 글자만 틀려도 파일 전체를 못 읽음</text>
+    <text x="52" y="402" font-size="12.5" fill="#64748b">→ 데이터가 쌓이는 가계부에는 불편</text>
+  </g>
+
+  <!-- JSONL -->
+  <rect x="515" y="92" width="455" height="330" rx="16" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+  <text x="537" y="124" font-size="18" font-weight="800" fill="#15803d">JSONL 파일 (이 과제의 선택)</text>
+  <text x="537" y="146" font-size="13" fill="#64748b">줄 하나 = 완성된 JSON 하나 = 거래 한 건</text>
+  <rect x="537" y="160" width="410" height="122" rx="10" fill="#0f172a"/>
+  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13.5" fill="#e2e8f0">
+    <text x="551" y="196">{"id": "TX-000001", ...}</text>
+    <text x="551" y="222">{"id": "TX-000002", ...}</text>
+    <text x="551" y="248">{"id": "TX-000003", ...}</text>
+    <text x="551" y="272" fill="#86efac">{"id": "TX-000004", ...}  ← 새 줄</text>
+  </g>
+  <g font-size="14" fill="#334155">
+    <text x="537" y="312" font-weight="700" fill="#15803d">추가할 때</text>
+    <text x="625" y="312">맨 끝에 한 줄 붙이기 ("a" 모드)</text>
+    <text x="537" y="342" font-weight="700" fill="#15803d">읽을 때</text>
+    <text x="625" y="342">한 줄씩 json.loads → yield 로 한 건씩</text>
+    <text x="537" y="372" font-weight="700" fill="#15803d">깨지면</text>
+    <text x="625" y="372">"3번째 줄이 손상" 처럼 그 줄만 알려 줌</text>
+    <text x="537" y="402" font-size="12.5" fill="#64748b">→ 쌓이고, 흘려 읽고, 문제를 찾기 쉬움</text>
+  </g>
+
+  <!-- CSV -->
+  <rect x="30" y="442" width="940" height="158" rx="16" fill="#fffbeb" stroke="#f59e0b" stroke-width="2.5"/>
+  <text x="52" y="474" font-size="18" font-weight="800" fill="#92400e">그럼 CSV는? — 같은 거래를 CSV 한 줄로</text>
+  <rect x="52" y="488" width="896" height="34" rx="8" fill="#0f172a"/>
+  <text x="66" y="511" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13.5" fill="#e2e8f0">2024-01-15,expense,food,15000,점심,"meal,lunch"</text>
+  <g font-size="14" fill="#334155">
+    <text x="52" y="550">• 모든 값이 글자 → <tspan font-weight="700">15000 을 int 로</tspan>, <tspan font-weight="700">"meal,lunch" 를 목록으로</tspan> 직접 바꿔야 함</text>
+    <text x="52" y="578">• 대신 엑셀로 바로 열림 → <tspan font-weight="700" fill="#92400e">저장 = JSONL,  엑셀과 주고받기(import/export) = CSV</tspan></text>
+  </g>
+</svg>

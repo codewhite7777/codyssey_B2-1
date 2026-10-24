@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="640" rx="18" fill="#ffffff"/>
+  <text x="500" y="44" text-anchor="middle" font-size="25" font-weight="800" fill="#0f172a">클래스 설계 — 누가 무엇을 맡나</text>
+  <text x="500" y="72" text-anchor="middle" font-size="14.5" fill="#475569">화살표 = "부탁한다". 위에서 아래로만 부탁하고, 아래는 위를 모른다.</text>
+
+  <!-- CLI -->
+  <rect x="40" y="92" width="600" height="72" rx="14" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="60" y="122" font-size="17" font-weight="800" fill="#1e3a8a">cli.py — 명령 함수 11개</text>
+  <rect x="420" y="104" width="204" height="28" rx="14" fill="#9333ea"/>
+  <text x="522" y="123" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">모두 @handle_errors 로 감쌈</text>
+  <text x="60" y="150" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#334155">cmd_add · cmd_list · cmd_search · cmd_summary … (입력 · 출력만)</text>
+
+  <line x1="340" y1="166" x2="340" y2="190" stroke="#475569" stroke-width="2.5" marker-end="url(#arr)"/>
+
+  <!-- Service -->
+  <rect x="40" y="194" width="600" height="136" rx="14" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+  <text x="60" y="224" font-size="17" font-weight="800" fill="#14532d">BudgetService — 규칙 담당</text>
+  <text x="620" y="224" text-anchor="end" font-size="12.5" fill="#15803d">저장소 3개를 함께 쓴다</text>
+  <g font-size="13.5" fill="#334155">
+    <text x="60" y="252"><tspan font-weight="700" fill="#166534">거래</tspan></text>
+    <text x="110" y="252" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13">add · latest · search · update · delete</text>
+    <text x="60" y="276"><tspan font-weight="700" fill="#166534">정리</tspan></text>
+    <text x="110" y="276" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13">set_budget · summary · add/remove_category</text>
+    <text x="60" y="300"><tspan font-weight="700" fill="#166534">CSV</tspan></text>
+    <text x="110" y="300" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13">import_csv · export_csv</text>
+    <text x="60" y="320" font-size="12" fill="#64748b">+ 입력 검사 함수 parse_date · parse_amount · parse_type (같은 파일)</text>
+  </g>
+
+  <!-- arrows to stores -->
+  <line x1="170" y1="332" x2="170" y2="366" stroke="#475569" stroke-width="2.5" marker-end="url(#arr)"/>
+  <line x1="340" y1="332" x2="500" y2="366" stroke="#475569" stroke-width="2.5" marker-end="url(#arr)"/>
+  <line x1="560" y1="332" x2="815" y2="366" stroke="#475569" stroke-width="2.5" marker-end="url(#arr)"/>
+
+  <!-- Transaction dataclass -->
+  <rect x="670" y="92" width="290" height="238" rx="14" fill="#f8fafc" stroke="#64748b" stroke-width="2.5" stroke-dasharray="7 5"/>
+  <text x="690" y="122" font-size="17" font-weight="800" fill="#0f172a">@dataclass Transaction</text>
+  <text x="690" y="142" font-size="12.5" fill="#64748b">모든 계층이 주고받는 "주문서 양식"</text>
+  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">
+    <text x="690" y="170">id: str</text><text x="830" y="170" fill="#64748b">TX-000001</text>
+    <text x="690" y="192">type: str</text><text x="830" y="192" fill="#64748b">income/expense</text>
+    <text x="690" y="214">date: str</text><text x="830" y="214" fill="#64748b">YYYY-MM-DD</text>
+    <text x="690" y="236">amount: int</text><text x="830" y="236" fill="#64748b">양수</text>
+    <text x="690" y="258">category: str</text><text x="830" y="258" fill="#64748b">등록된 이름</text>
+    <text x="690" y="280">memo: str</text><text x="830" y="280" fill="#64748b">선택</text>
+    <text x="690" y="302">tags: list[str]</text><text x="830" y="302" fill="#64748b">선택</text>
+  </g>
+
+  <!-- Stores -->
+  <rect x="40" y="370" width="290" height="140" rx="14" fill="#fffbeb" stroke="#f59e0b" stroke-width="2.5"/>
+  <text x="58" y="398" font-size="16" font-weight="800" fill="#92400e">TransactionRepository</text>
+  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">
+    <text x="58" y="426">iter_all()</text><text x="178" y="426" font-size="12" fill="#b45309">← yield 한 건씩</text>
+    <text x="58" y="450">find() · next_number()</text>
+    <text x="58" y="474">append()</text><text x="178" y="474" font-size="12" fill="#b45309">← 끝에 한 줄</text>
+    <text x="58" y="498">rewrite()</text><text x="178" y="498" font-size="12" fill="#b45309">← 안전 교체</text>
+  </g>
+
+  <rect x="355" y="370" width="290" height="140" rx="14" fill="#fffbeb" stroke="#f59e0b" stroke-width="2.5"/>
+  <text x="373" y="398" font-size="16" font-weight="800" fill="#92400e">CategoryStore</text>
+  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">
+    <text x="373" y="426">names()</text><text x="493" y="426" font-size="12" fill="#b45309">← 이름 목록</text>
+    <text x="373" y="450">save()</text><text x="493" y="450" font-size="12" fill="#b45309">← 안전 교체</text>
+  </g>
+
+  <rect x="670" y="370" width="290" height="140" rx="14" fill="#fffbeb" stroke="#f59e0b" stroke-width="2.5"/>
+  <text x="688" y="398" font-size="16" font-weight="800" fill="#92400e">BudgetStore</text>
+  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">
+    <text x="688" y="426">all() · get()</text><text x="828" y="426" font-size="12" fill="#b45309">← 월별 예산</text>
+    <text x="688" y="450">set()</text><text x="828" y="450" font-size="12" fill="#b45309">← 같은 달 덮어쓰기</text>
+  </g>
+
+  <!-- files -->
+  <g stroke="#475569" stroke-width="2.5">
+    <line x1="185" y1="512" x2="185" y2="534" marker-end="url(#arr)"/>
+    <line x1="500" y1="512" x2="500" y2="534" marker-end="url(#arr)"/>
+    <line x1="815" y1="512" x2="815" y2="534" marker-end="url(#arr)"/>
+  </g>
+  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13.5">
+    <rect x="70" y="538" width="230" height="34" rx="8" fill="#0f172a"/><text x="185" y="560" text-anchor="middle" fill="#fcd34d">transactions.jsonl</text>
+    <rect x="385" y="538" width="230" height="34" rx="8" fill="#0f172a"/><text x="500" y="560" text-anchor="middle" fill="#fcd34d">categories.jsonl</text>
+    <rect x="700" y="538" width="230" height="34" rx="8" fill="#0f172a"/><text x="815" y="560" text-anchor="middle" fill="#fcd34d">budgets.jsonl</text>
+  </g>
+
+  <!-- rules -->
+  <rect x="40" y="588" width="920" height="40" rx="10" fill="#f1f5f9"/>
+  <text x="60" y="614" font-size="14" font-weight="800" fill="#0f172a">나눈 기준</text>
+  <text x="140" y="614" font-size="14" fill="#0f172a">파일 1개 = 저장 클래스 1개   ·   여러 파일을 함께 봐야 하는 규칙은 BudgetService   ·   화면은 cli.py</text>
+</svg>
