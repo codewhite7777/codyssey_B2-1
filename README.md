@@ -105,18 +105,13 @@ options:
 
 <p align="center"><img src="images/01-class-design.svg" alt="cli.py의 명령 함수 11개가 @handle_errors로 감싸져 BudgetService에 부탁하고, BudgetService는 TransactionRepository, CategoryStore, BudgetStore를 함께 쓴다. 각 저장 클래스는 JSONL 파일 하나를 맡는다. Transaction dataclass는 모든 계층이 주고받는 양식이다" width="100%"></p>
 
-| 클래스 (파일) | 맡은 일 | 모르는 것 |
+| 역할 | 클래스 | 한 줄로 |
 |---|---|---|
-| `Transaction` (`models.py`) | 거래 한 건의 **모양** (`@dataclass`) | 저장 방법, 화면 |
-| `TransactionRepository` (`storage.py`) | `transactions.jsonl` 읽기 · 추가 · 안전한 재작성 | 카테고리가 있는지 |
-| `CategoryStore` (`storage.py`) | `categories.jsonl` 이름 목록 | 그 카테고리를 쓰는 거래가 있는지 |
-| `BudgetStore` (`storage.py`) | `budgets.jsonl` 월별 예산 | 이번 달에 얼마 썼는지 |
-| `BudgetService` (`service.py`) | 입력 검증 + **여러 파일을 함께 봐야 하는 규칙** | 화면 출력, 파일 형식 |
-| 명령 함수 11개 (`cli.py`) | `input()` 질문 · `print()` 출력 | 규칙, 파일 형식 |
+| 화면 | `cli.py` 명령 함수 | 묻고 보여준다 |
+| 규칙 | `BudgetService` | 검사하고 판단한다 |
+| 저장 | `TransactionRepository` · `CategoryStore` · `BudgetStore` | 파일 1개씩 읽고 쓴다 |
 
-- **나눈 기준** : "이 코드가 **바뀌는 이유**가 뭐지?" — 화면이 바뀌면 `cli.py`, 규칙이 바뀌면 `service.py`, 파일 형식이 바뀌면 `storage.py`.
-- **경계가 보이는 예** : "사용 중인 카테고리는 삭제 금지"는 거래 파일과 카테고리 파일을 **둘 다** 봐야 하므로 `CategoryStore` 가 아니라 `BudgetService` 에 있습니다. (3-10)
-- **효과** : JSONL을 다른 형식(예: SQLite)으로 바꿔도 `storage.py` 만 고치면 됩니다.
+**나눈 기준** : 바뀌는 이유가 같은 것끼리. 예) "사용 중인 카테고리 삭제 금지"는 파일 2개를 함께 봐야 하므로 저장 클래스가 아니라 `BudgetService` 에 있다.
 
 <details>
 <summary>모듈 구성 보기 (7개 파일)</summary>
