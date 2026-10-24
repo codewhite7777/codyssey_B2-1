@@ -1,150 +1,115 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 790" width="1000" height="790" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif">
-  <defs>
-    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
-    </marker>
-  </defs>
-  <rect width="1000" height="790" rx="18" fill="#ffffff"/>
-  <text x="500" y="46" text-anchor="middle" font-size="27" font-weight="800" fill="#0f172a">용돈 기입장으로 보내는 1월 한 달</text>
-  <text x="500" y="76" text-anchor="middle" font-size="15" fill="#475569">상황이 생기면 → 명령어 한 줄 입력 → 결과가 바로 나온다   ·   명령 앞의 python -m budget_app 은 생략</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1250" width="1000" height="1250" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif">
+  <rect width="1000" height="1250" rx="20" fill="#ffffff"/>
 
-  <!-- ================= ROW 1 ================= -->
-  <!-- card 1 : budget -->
+  <!-- title -->
+  <text x="500" y="62" text-anchor="middle" font-size="30" font-weight="800" fill="#0f172a">용돈 기입장으로 보내는 1월 한 달</text>
+  <text x="500" y="98" text-anchor="middle" font-size="16" fill="#64748b">상황이 생기면 → 명령어 한 줄 → 결과가 바로 나온다</text>
+
+  <!-- timeline line -->
+  <line x1="110" y1="160" x2="110" y2="1015" stroke="#e2e8f0" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- ===== row 1 : budget ===== -->
   <g>
-    <rect x="30" y="100" width="300" height="255" rx="16" fill="#fffbeb" stroke="#f59e0b" stroke-width="2.5"/>
-    <rect x="30" y="100" width="300" height="46" rx="16" fill="#f59e0b"/>
-    <rect x="30" y="130" width="300" height="16" fill="#f59e0b"/>
-    <text x="50" y="130" font-size="17" font-weight="800" fill="#fff">① 1월 1일 · 예산 정하기</text>
-    <circle cx="290" cy="188" r="24" fill="#f59e0b"/>
-    <circle cx="290" cy="188" r="15" fill="none" stroke="#fff" stroke-width="3"/>
-    <circle cx="290" cy="188" r="6" fill="#fff"/>
-    <text x="50" y="186" font-size="19" font-weight="800" fill="#0f172a">"이번 달은</text>
-    <text x="50" y="211" font-size="19" font-weight="800" fill="#0f172a">50만원만 쓰자"</text>
-    <rect x="46" y="230" width="268" height="54" rx="9" fill="#0f172a"/>
-    <text x="58" y="253" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#fcd34d">budget set --month 2024-01</text>
-    <text x="58" y="273" xml:space="preserve" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#fcd34d">           --amount 500000</text>
-    <text x="50" y="314" font-size="13" font-weight="700" fill="#92400e">결과</text>
-    <text x="50" y="337" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">[저장 완료] 2024-01 예산 500000원</text>
+    <circle cx="110" cy="200" r="34" fill="#f59e0b"/>
+    <circle cx="110" cy="200" r="16" fill="none" stroke="#fff" stroke-width="4"/>
+    <circle cx="110" cy="200" r="6" fill="#fff"/>
+    <text x="165" y="194" font-size="21" font-weight="800" fill="#0f172a">1월 1일</text>
+    <text x="165" y="222" font-size="15" font-weight="700" fill="#b45309">예산 정하기</text>
+
+    <rect x="330" y="140" width="630" height="140" rx="18" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+    <text x="358" y="182" font-size="21" font-weight="800" fill="#0f172a">"이번 달은 50만원만 쓰자"</text>
+    <rect x="358" y="198" width="574" height="40" rx="10" fill="#0f172a"/>
+    <text x="376" y="224" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="15" fill="#fcd34d">budget set --month 2024-01 --amount 500000</text>
+    <text x="358" y="258" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="14" fill="#475569">→ [저장 완료] 2024-01 예산 500000원</text>
   </g>
 
-  <line x1="334" y1="228" x2="346" y2="228" stroke="#475569" stroke-width="3" marker-end="url(#arr)"/>
-
-  <!-- card 2 : income -->
+  <!-- ===== row 2 : income ===== -->
   <g>
-    <rect x="350" y="100" width="300" height="255" rx="16" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
-    <rect x="350" y="100" width="300" height="46" rx="16" fill="#16a34a"/>
-    <rect x="350" y="130" width="300" height="16" fill="#16a34a"/>
-    <text x="370" y="130" font-size="17" font-weight="800" fill="#fff">② 1월 14일 · 수입 기록</text>
-    <circle cx="610" cy="188" r="24" fill="#16a34a"/>
-    <line x1="598" y1="188" x2="622" y2="188" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-    <line x1="610" y1="176" x2="610" y2="200" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-    <text x="370" y="186" font-size="19" font-weight="800" fill="#0f172a">"월급 300만원</text>
-    <text x="370" y="211" font-size="19" font-weight="800" fill="#0f172a">들어왔다"</text>
-    <rect x="366" y="230" width="268" height="54" rx="9" fill="#0f172a"/>
-    <text x="378" y="253" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#86efac">add</text>
-    <text x="378" y="273" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#94a3b8">→ 질문에 답: income, 3000000</text>
-    <text x="370" y="314" font-size="13" font-weight="700" fill="#166534">결과</text>
-    <text x="370" y="337" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">[저장 완료] id=TX-000003</text>
+    <circle cx="110" cy="370" r="34" fill="#16a34a"/>
+    <line x1="96" y1="370" x2="124" y2="370" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+    <line x1="110" y1="356" x2="110" y2="384" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+    <text x="165" y="364" font-size="21" font-weight="800" fill="#0f172a">1월 14일</text>
+    <text x="165" y="392" font-size="15" font-weight="700" fill="#15803d">수입 기록</text>
+
+    <rect x="330" y="310" width="630" height="140" rx="18" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+    <text x="358" y="352" font-size="21" font-weight="800" fill="#0f172a">"월급 300만원 들어왔다"</text>
+    <rect x="358" y="368" width="574" height="40" rx="10" fill="#0f172a"/>
+    <text x="376" y="394" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="15" fill="#86efac">add</text>
+    <text x="420" y="394" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="14" fill="#94a3b8">→ 질문에 답: income · salary · 3000000</text>
+    <text x="358" y="428" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="14" fill="#475569">→ [저장 완료] id=TX-000003</text>
   </g>
 
-  <line x1="654" y1="228" x2="666" y2="228" stroke="#475569" stroke-width="3" marker-end="url(#arr)"/>
-
-  <!-- card 3 : expense -->
+  <!-- ===== row 3 : expense ===== -->
   <g>
-    <rect x="670" y="100" width="300" height="255" rx="16" fill="#fff1f2" stroke="#e11d48" stroke-width="2.5"/>
-    <rect x="670" y="100" width="300" height="46" rx="16" fill="#e11d48"/>
-    <rect x="670" y="130" width="300" height="16" fill="#e11d48"/>
-    <text x="690" y="130" font-size="17" font-weight="800" fill="#fff">③ 1월 15일 · 지출 기록</text>
-    <circle cx="930" cy="188" r="24" fill="#e11d48"/>
-    <line x1="918" y1="188" x2="942" y2="188" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-    <text x="690" y="186" font-size="19" font-weight="800" fill="#0f172a">"점심으로</text>
-    <text x="690" y="211" font-size="19" font-weight="800" fill="#0f172a">15,000원 썼다"</text>
-    <rect x="686" y="230" width="268" height="54" rx="9" fill="#0f172a"/>
-    <text x="698" y="253" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#86efac">add</text>
-    <text x="698" y="273" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#94a3b8">→ expense, food, 15000, 점심</text>
-    <text x="690" y="314" font-size="13" font-weight="700" fill="#9f1239">결과</text>
-    <text x="690" y="337" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">[저장 완료] id=TX-000004</text>
+    <circle cx="110" cy="540" r="34" fill="#e11d48"/>
+    <line x1="96" y1="540" x2="124" y2="540" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+    <text x="165" y="534" font-size="21" font-weight="800" fill="#0f172a">1월 15일</text>
+    <text x="165" y="562" font-size="15" font-weight="700" fill="#be123c">지출 기록</text>
+
+    <rect x="330" y="480" width="630" height="140" rx="18" fill="#fff1f2" stroke="#fda4af" stroke-width="2"/>
+    <text x="358" y="522" font-size="21" font-weight="800" fill="#0f172a">"점심으로 15,000원 썼다"</text>
+    <rect x="358" y="538" width="574" height="40" rx="10" fill="#0f172a"/>
+    <text x="376" y="564" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="15" fill="#86efac">add</text>
+    <text x="420" y="564" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="14" fill="#94a3b8">→ 질문에 답: expense · food · 15000 · 점심</text>
+    <text x="358" y="598" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="14" fill="#475569">→ [저장 완료] id=TX-000004</text>
   </g>
 
-  <!-- wrap arrow row1 -> row2 -->
-  <path d="M 820 359 V 377 H 180 V 391" fill="none" stroke="#475569" stroke-width="3" marker-end="url(#arr)"/>
-
-  <!-- ================= ROW 2 ================= -->
-  <!-- card 4 : search -->
+  <!-- ===== row 4 : search ===== -->
   <g>
-    <rect x="30" y="395" width="300" height="255" rx="16" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
-    <rect x="30" y="395" width="300" height="46" rx="16" fill="#2563eb"/>
-    <rect x="30" y="425" width="300" height="16" fill="#2563eb"/>
-    <text x="50" y="425" font-size="17" font-weight="800" fill="#fff">④ 1월 20일 · 찾아보기</text>
-    <circle cx="290" cy="483" r="24" fill="#2563eb"/>
-    <circle cx="286" cy="479" r="9" fill="none" stroke="#fff" stroke-width="3.5"/>
-    <line x1="293" y1="486" x2="301" y2="494" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-    <text x="50" y="481" font-size="19" font-weight="800" fill="#0f172a">"점심값 쓴 거</text>
-    <text x="50" y="506" font-size="19" font-weight="800" fill="#0f172a">어디 있더라?"</text>
-    <rect x="46" y="525" width="268" height="54" rx="9" fill="#0f172a"/>
-    <text x="58" y="548" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#93c5fd">search --q 점심</text>
-    <text x="58" y="568" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#94a3b8">(전체 최신순은 list)</text>
-    <text x="50" y="609" font-size="13" font-weight="700" fill="#1e40af">결과</text>
-    <text x="50" y="632" font-size="13.5" fill="#0f172a">점심 기록 3건이 최신순으로 나온다</text>
+    <circle cx="110" cy="710" r="34" fill="#2563eb"/>
+    <circle cx="105" cy="705" r="11" fill="none" stroke="#fff" stroke-width="4"/>
+    <line x1="113" y1="713" x2="123" y2="723" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+    <text x="165" y="704" font-size="21" font-weight="800" fill="#0f172a">1월 20일</text>
+    <text x="165" y="732" font-size="15" font-weight="700" fill="#1d4ed8">찾아보기</text>
+
+    <rect x="330" y="650" width="630" height="140" rx="18" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+    <text x="358" y="692" font-size="21" font-weight="800" fill="#0f172a">"점심값 쓴 거 어디 있더라?"</text>
+    <rect x="358" y="708" width="574" height="40" rx="10" fill="#0f172a"/>
+    <text x="376" y="734" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="15" fill="#93c5fd">search --q 점심</text>
+    <text x="358" y="768" font-size="14.5" fill="#475569">→ 점심 기록 3건이 최신순으로 나온다  (전체 목록은 list)</text>
   </g>
 
-  <line x1="334" y1="523" x2="346" y2="523" stroke="#475569" stroke-width="3" marker-end="url(#arr)"/>
-
-  <!-- card 5 : delete -->
+  <!-- ===== row 5 : delete ===== -->
   <g>
-    <rect x="350" y="395" width="300" height="255" rx="16" fill="#f8fafc" stroke="#64748b" stroke-width="2.5"/>
-    <rect x="350" y="395" width="300" height="46" rx="16" fill="#64748b"/>
-    <rect x="350" y="425" width="300" height="16" fill="#64748b"/>
-    <text x="370" y="425" font-size="17" font-weight="800" fill="#fff">⑤ 1월 21일 · 고치기 / 지우기</text>
-    <circle cx="610" cy="483" r="24" fill="#64748b"/>
-    <rect x="600" y="477" width="20" height="18" rx="2" fill="none" stroke="#fff" stroke-width="3"/>
-    <line x1="596" y1="473" x2="624" y2="473" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-    <line x1="606" y1="469" x2="614" y2="469" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-    <text x="370" y="481" font-size="19" font-weight="800" fill="#0f172a">"앗, 같은 걸</text>
-    <text x="370" y="506" font-size="19" font-weight="800" fill="#0f172a">두 번 넣었네"</text>
-    <rect x="366" y="525" width="268" height="54" rx="9" fill="#0f172a"/>
-    <text x="378" y="548" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#e2e8f0">delete --id TX-000006</text>
-    <text x="378" y="568" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#94a3b8">(값만 고칠 땐 update)</text>
-    <text x="370" y="609" font-size="13" font-weight="700" fill="#334155">결과</text>
-    <text x="370" y="632" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#0f172a">[삭제 완료] id=TX-000006</text>
+    <circle cx="110" cy="880" r="34" fill="#64748b"/>
+    <rect x="99" y="875" width="22" height="20" rx="2" fill="none" stroke="#fff" stroke-width="3.5"/>
+    <line x1="94" y1="870" x2="126" y2="870" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="105" y1="865" x2="115" y2="865" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+    <text x="165" y="874" font-size="21" font-weight="800" fill="#0f172a">1월 21일</text>
+    <text x="165" y="902" font-size="15" font-weight="700" fill="#475569">고치기 · 지우기</text>
+
+    <rect x="330" y="820" width="630" height="140" rx="18" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="358" y="862" font-size="21" font-weight="800" fill="#0f172a">"앗, 같은 걸 두 번 넣었네"</text>
+    <rect x="358" y="878" width="574" height="40" rx="10" fill="#0f172a"/>
+    <text x="376" y="904" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="15" fill="#e2e8f0">delete --id TX-000006</text>
+    <text x="358" y="938" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="14" fill="#475569">→ [삭제 완료] id=TX-000006   (값만 고칠 땐 update)</text>
   </g>
 
-  <line x1="654" y1="523" x2="666" y2="523" stroke="#475569" stroke-width="3" marker-end="url(#arr)"/>
-
-  <!-- card 6 : summary -->
+  <!-- ===== row 6 : summary ===== -->
   <g>
-    <rect x="670" y="395" width="300" height="255" rx="16" fill="#faf5ff" stroke="#9333ea" stroke-width="2.5"/>
-    <rect x="670" y="395" width="300" height="46" rx="16" fill="#9333ea"/>
-    <rect x="670" y="425" width="300" height="16" fill="#9333ea"/>
-    <text x="690" y="425" font-size="17" font-weight="800" fill="#fff">⑥ 1월 31일 · 한 달 결산</text>
-    <circle cx="930" cy="483" r="24" fill="#9333ea"/>
-    <rect x="918" y="484" width="6" height="11" fill="#fff"/>
-    <rect x="927" y="476" width="6" height="19" fill="#fff"/>
-    <rect x="936" y="469" width="6" height="26" fill="#fff"/>
-    <text x="690" y="481" font-size="19" font-weight="800" fill="#0f172a">"이번 달</text>
-    <text x="690" y="506" font-size="19" font-weight="800" fill="#0f172a">얼마나 썼지?"</text>
-    <rect x="686" y="525" width="268" height="54" rx="9" fill="#0f172a"/>
-    <text x="698" y="548" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13" fill="#d8b4fe">summary --month 2024-01</text>
-    <text x="698" y="568" xml:space="preserve" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#94a3b8">        --top 3</text>
-    <text x="690" y="606" font-size="13" font-weight="700" fill="#6b21a8">결과</text>
-    <text x="730" y="606" font-size="13" fill="#0f172a">지출 215,000원 / 예산 500,000원</text>
-    <rect x="690" y="616" width="200" height="16" rx="8" fill="#e9d5ff"/>
-    <rect x="690" y="616" width="86" height="16" rx="8" fill="#9333ea"/>
-    <text x="900" y="629" font-size="14" font-weight="800" fill="#6b21a8">43%</text>
+    <circle cx="110" cy="1050" r="34" fill="#9333ea"/>
+    <rect x="95" y="1052" width="7" height="13" fill="#fff"/>
+    <rect x="106" y="1043" width="7" height="22" fill="#fff"/>
+    <rect x="117" y="1034" width="7" height="31" fill="#fff"/>
+    <text x="165" y="1044" font-size="21" font-weight="800" fill="#0f172a">1월 31일</text>
+    <text x="165" y="1072" font-size="15" font-weight="700" fill="#7e22ce">한 달 결산</text>
+
+    <rect x="330" y="990" width="630" height="140" rx="18" fill="#faf5ff" stroke="#d8b4fe" stroke-width="2"/>
+    <text x="358" y="1032" font-size="21" font-weight="800" fill="#0f172a">"이번 달 얼마나 썼지?"</text>
+    <rect x="358" y="1048" width="574" height="40" rx="10" fill="#0f172a"/>
+    <text x="376" y="1074" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="15" fill="#d8b4fe">summary --month 2024-01 --top 3</text>
+    <text x="358" y="1108" font-size="14.5" fill="#475569">→ 지출 215,000원 / 예산 500,000원</text>
+    <rect x="640" y="1095" width="230" height="16" rx="8" fill="#e9d5ff"/>
+    <rect x="640" y="1095" width="99" height="16" rx="8" fill="#9333ea"/>
+    <text x="884" y="1109" font-size="16" font-weight="800" fill="#7e22ce">43%</text>
   </g>
 
-  <!-- ================= FOOTER ================= -->
-  <rect x="30" y="672" width="610" height="98" rx="14" fill="#0f172a"/>
-  <text x="52" y="704" font-size="16" font-weight="800" fill="#fcd34d">이 모든 기록은 파일 3개에 남는다</text>
-  <text x="52" y="728" font-size="13.5" fill="#cbd5e1">프로그램을 껐다 켜도, 다음 날 다시 열어도 그대로</text>
-  <g font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5">
-    <rect x="52" y="740" width="170" height="22" rx="6" fill="#1e293b"/><text x="62" y="756" fill="#e2e8f0">transactions.jsonl</text>
-    <rect x="230" y="740" width="160" height="22" rx="6" fill="#1e293b"/><text x="240" y="756" fill="#e2e8f0">categories.jsonl</text>
-    <rect x="398" y="740" width="140" height="22" rx="6" fill="#1e293b"/><text x="408" y="756" fill="#e2e8f0">budgets.jsonl</text>
-  </g>
+  <!-- footer -->
+  <rect x="40" y="1160" width="450" height="62" rx="16" fill="#0f172a"/>
+  <text x="66" y="1189" font-size="16" font-weight="800" fill="#fcd34d">기록은 JSONL 파일 3개에 남는다</text>
+  <text x="66" y="1210" font-size="13.5" fill="#cbd5e1">프로그램을 껐다 켜도 그대로</text>
 
-  <rect x="660" y="672" width="310" height="98" rx="14" fill="#ecfeff" stroke="#06b6d4" stroke-width="2"/>
-  <text x="680" y="704" font-size="16" font-weight="800" fill="#155e75">엑셀과 주고받기</text>
-  <text x="680" y="730" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#0f172a">export --out jan.csv --month 2024-01</text>
-  <text x="680" y="754" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="12.5" fill="#0f172a">import --from bank.csv</text>
+  <rect x="510" y="1160" width="450" height="62" rx="16" fill="#ecfeff" stroke="#67e8f9" stroke-width="2"/>
+  <text x="536" y="1189" font-size="16" font-weight="800" fill="#155e75">엑셀과는 CSV로 주고받기</text>
+  <text x="536" y="1210" font-family="'D2Coding', 'Consolas', 'Noto Sans Mono CJK KR', monospace" font-size="13.5" fill="#0f172a">export · import</text>
 </svg>
